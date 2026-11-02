@@ -296,3 +296,20 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .env .wax.seal i{position:absolute;right:-6px;bottom:-4px;font-style:normal;font-size:13px}
 .env.locked .wax.seal img{filter:grayscale(1) brightness(.8) drop-shadow(0 2px 2px rgba(0,0,0,.45))}
 .cert-seal{background:url(a/siegel.svg) center/contain no-repeat!important;box-shadow:none!important;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+/* Startseite auf schmalen Handys */
+#s-start h1{font-size:clamp(26px,8.6vw,40px)}
+#s-start .kick{font-size:clamp(9.5px,2.8vw,12px);letter-spacing:.08em}
+/* Schmale Handys */
+.opts>*{min-width:0}
+.opt{overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto}
+.deskhead>*:first-child{min-width:0}
+.deskhead .title{font-size:clamp(19px,6.2vw,24px)}
+.plan{max-width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}
+.plan button span{overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto;text-align:center}
+@media (max-width:380px){
+ .opts[style*="repeat(3"] .opt{padding:8px 5px;font-size:13px}
+ .opts[style*="repeat(3"] .opt .lab{font-size:15px;margin-right:3px}
+ .stick{font-size:16px;letter-spacing:2.5px}
+ .plan button{font-size:10.5px}
+ .headbtns{gap:5px}
+}
