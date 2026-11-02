@@ -94,7 +94,7 @@ function rbDraw(){const [cx,cy]=RB.C,[kx,ky]=RB.k,set=(id,d)=>document.getElemen
  const v1=`M200 -14 Q${(200+kx)/2} ${ky*0.45} ${kx} ${ky}`,v2=`M${kx} ${ky} Q${(200+kx)/2} ${ky+(314-ky)*0.55} 200 314`,h1=`M-14 150 Q${kx*0.45} ${(150+ky)/2} ${kx} ${ky}`,h2=`M${kx} ${ky} Q${kx+(414-kx)*0.55} ${(150+ky)/2} 414 150`;
  set('bv1',v1);set('bv2',v2);set('bh1',h1);set('bh2',h2);set('sv1',v1);set('sv2',v2);set('sh1',h1);set('sh2',h2);
  const t=RB.t,sc=1-0.8*Math.min(1,t);document.getElementById('loops').setAttribute('transform',`scale(${sc}) rotate(${t*25})`);
- document.getElementById('bowg').setAttribute('transform',`translate(${kx} ${ky})`);
+ document.getElementById('bowg').setAttribute('transform',`translate(${kx} ${ky})`);document.getElementById('sealg').setAttribute('transform',`translate(${kx} ${ky})`);
  const p=RB.p||[kx+42,ky+92];const px=p[0]-kx,py=p[1]-ky;set('tailR',`M0 0 Q${px*0.4+10} ${py*0.6+18} ${px} ${py}`);
  set('tailL',`M0 0 Q${-18+t*6} ${36-t*10} ${-36+t*16} ${80-t*30}`)}
 function openEnv(d){curDay=d;const e=$('#envelope');e.className='envelope';$('#rib').setAttribute('class','rib');RB.k=[200,150];RB.p=null;RB.t=0;RB.free=false;rbDraw();
