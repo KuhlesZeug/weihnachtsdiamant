@@ -390,3 +390,5 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .final-help .btn.ghost{color:#5a3e2a;border-color:rgba(90,62,42,.55)}
 .cert-seal.empty .cs-hint{font-size:clamp(9px,2.3vw,12px);font-weight:700}
 .cert-seal.empty .cs-hint{font-size:clamp(7px,1.75vw,9px);letter-spacing:0}
+
+.env .solvedmark{font:700 26px Lora;color:#2f6b3a;text-shadow:0 1px 0 rgba(255,255,255,.5)}
