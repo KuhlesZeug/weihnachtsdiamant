@@ -4,6 +4,7 @@ const $=s=>document.querySelector(s), el=(t,c,h)=>{const e=document.createElemen
 const SOL='DERDIAMANTLIEGTIMUHRWERK', WORDS=[3,7,5,2,7]; // DER DIAMANT LIEGT IM UHRWERK
 const params=new URLSearchParams(location.search);
 const KEY='kz_krimi_v1';
+if(params.get('reset')==='1'&&params.get('probe')){try{localStorage.removeItem(KEY)}catch(e){}history.replaceState(null,'',location.pathname+location.search.replace(/[?&]reset=1/,'').replace(/^&/,'?'))}
 let st={done:{},open:{},sound:true};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)st=Object.assign(st,s)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
