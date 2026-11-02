@@ -393,4 +393,4 @@ input[type=range]{width:100%;accent-color:var(--red)}
 
 .env .solvedmark{font:700 26px Lora;color:#2f6b3a;text-shadow:0 1px 0 rgba(255,255,255,.5)}
 /* Handy: Papier randlos bis zum Bildschirmrand */
-@media (max-width:480px){.case{padding-left:0;padding-right:0}.case>.paper{border-radius:0}}
+@media (max-width:480px){.case{padding-left:0;padding-right:0}.case>.paper{border-radius:0}.case>:not(.paper){max-width:calc(100% - 28px);box-sizing:border-box}}
