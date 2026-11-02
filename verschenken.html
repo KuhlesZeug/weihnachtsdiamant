@@ -33,6 +33,9 @@ textarea.f{min-height:96px;resize:vertical}
     <input class="f" id="von" maxlength="40" placeholder="Dein Name">
     <label for="m">Dein Gruß (erscheint auf der ersten Seite)</label>
     <textarea class="f" id="m" maxlength="280" placeholder="Damit dir im Advent nicht langweilig wird …"></textarea>
+    <label for="s">Geheime Botschaft für Heiligabend (freiwillig)</label>
+    <p class="small" style="color:var(--ink);margin:0 0 6px">Bleibt den ganzen Dezember versiegelt. Erst wenn der Fall gelöst ist, öffnet der Beschenkte diesen letzten Umschlag von dir.</p>
+    <textarea class="f" id="s" maxlength="400" placeholder="Frohe Weihnachten! Heute Abend wartet noch eine Überraschung auf dich …"></textarea>
     <div class="row"><button class="btn" id="make">Geschenklink erstellen</button></div>
     <div id="out">
       <p class="question">Dein persönlicher Geschenklink:</p>
@@ -52,8 +55,8 @@ textarea.f{min-height:96px;resize:vertical}
 const $=s=>document.querySelector(s);
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2600)}
 $('#make').onclick=async()=>{const c=kzNormCode($('#code').value);if(!c||await kzSha(c)!==KZ_H){toast('Der Code stimmt nicht. Er steht in deinem PDF.');return}
- const an=$('#an').value.trim(),von=$('#von').value.trim(),m=$('#m').value.trim();if(!an){toast('Bitte trag ein, für wen der Fall ist.');return}
- const k=await kzSig(an,von,m);const url=new URL('./',location.href).href+'?g='+kzEnc({an,von,m,k});
+ const an=$('#an').value.trim(),von=$('#von').value.trim(),m=$('#m').value.trim(),s=$('#s').value.trim();if(!an){toast('Bitte trag ein, für wen der Fall ist.');return}
+ const k=await kzSig(an,von,kzMsg(m,s));const o={an,von,m,k};if(s)o.s=kzHide(s);const url=new URL('./',location.href).href+'?g='+kzEnc(o);
  $('#link').textContent=url;$('#out').style.display='block';$('#test').href=url;
  const txt='Ein Fall für dich, '+an+'! 🔎 Im Dezember öffnest du jeden Tag einen neuen Umschlag und jagst den Dieb des Weihnachtsdiamanten. Am besten mit Ton: '+url;
  $('#wa').href='https://wa.me/?text='+encodeURIComponent(txt);$('#out').scrollIntoView({behavior:'smooth'})};

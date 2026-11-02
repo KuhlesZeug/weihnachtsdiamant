@@ -313,3 +313,80 @@ input[type=range]{width:100%;accent-color:var(--red)}
  .plan button{font-size:10.5px}
  .headbtns{gap:5px}
 }
+
+/* Urkunde groß und als PDF */
+.cert{cursor:zoom-in}
+.cert-tap{font:italic 13px Lora;color:#d8c49a;margin:10px 0 0}
+.cert-modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));background:rgba(10,7,5,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.cert-modal.on{display:flex;animation:cmfade .25s ease}
+.cm-box{width:100%;max-width:720px;text-align:center}
+.cm-box img{width:100%;height:auto;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.7);animation:cmpop .55s cubic-bezier(.2,1.4,.4,1)}
+.cm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.cm-note{font:12px Lora;color:#bfae8a;margin-top:10px}
+@keyframes cmfade{from{opacity:0}to{opacity:1}}
+@keyframes cmpop{0%{transform:scale(.6) rotate(-4deg);opacity:0}100%{transform:none;opacity:1}}
+
+/* Spurensammlung */
+.report .words{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;width:100%}
+.poollab{width:100%;text-align:center;font:11px 'Special Elite';letter-spacing:.1em;text-transform:uppercase;color:rgba(216,180,106,.75);margin-top:6px}
+.pool{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;width:100%;min-height:26px}
+.tile{display:inline-flex;align-items:center;justify-content:center;width:22px;height:26px;border-radius:4px;background:linear-gradient(180deg,#f3e8cf,#d9c49a);color:#7a1418;font:700 15px 'Special Elite';box-shadow:0 2px 0 #8a6b3c,0 3px 6px rgba(0,0,0,.35);transform:rotate(calc(var(--r,0)*1deg))}
+.pool .tile:nth-child(3n){--r:-4}.pool .tile:nth-child(3n+1){--r:3}.pool .tile:nth-child(5n){--r:-2}
+.tile.new{animation:pop .7s ease}
+.pool.big{gap:7px;margin:14px 0 6px}
+.pool.big .tile{width:34px;height:40px;font-size:22px;border:0;cursor:pointer;transition:transform .15s,opacity .2s}
+.pool.big .tile:active{transform:scale(.9)}
+.pool.big .tile.used{opacity:.15;pointer-events:none}
+.report.big .slot{cursor:pointer}
+.report.big .slot.wrong{color:#c0392b;animation:shake .4s}
+.report.big .slot.ok{color:#1f6b3a;border-color:#1f6b3a}
+.report.big .slot.lock{color:#8a5a12}
+.final-hint{font:14px Lora;color:#5a3e2a;text-align:center;margin:4px 0 8px}
+.final-help{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0 12px}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+/* Standuhr interaktiv */
+.gc-door{cursor:pointer}
+#scene-clock{text-align:center}
+#clock-btn{margin:6px auto 4px}
+.gc-progwrap{width:160px;height:6px;margin:4px auto 8px;border-radius:3px;background:rgba(216,180,106,.18);overflow:hidden;opacity:0;transition:opacity .4s}
+.gclock.open:not(.roll)~.gc-progwrap{opacity:1}
+.gc-prog{height:100%;width:0;background:linear-gradient(90deg,#b8913f,#f3d98c);transition:width .25s}
+.gclock.rattle{animation:rattle .32s ease}
+@keyframes rattle{0%,100%{transform:none}20%{transform:rotate(-3deg) translateX(-5px)}45%{transform:rotate(3deg) translateX(5px)}70%{transform:rotate(-2deg) translateX(-3px)}}
+.gc-roll{position:absolute;left:50%;top:52%;font-size:44px;line-height:1;opacity:0;transform:translate(-50%,-50%) scale(.3);pointer-events:none;z-index:5;filter:drop-shadow(0 0 16px #bfe8ff)}
+.gclock.roll .gc-roll{animation:gemroll 1.5s cubic-bezier(.3,.1,.3,1) forwards,sparkle 1.6s ease-in-out 1.5s infinite}
+@keyframes gemroll{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(0)}15%{opacity:1;transform:translate(-50%,-50%) scale(.9) rotate(0)}45%{transform:translate(-50%,150px) scale(1) rotate(160deg)}60%{transform:translate(-30%,128px) scale(1) rotate(250deg)}75%{transform:translate(0%,150px) scale(1) rotate(360deg)}100%{opacity:1;transform:translate(40%,150px) scale(1.05) rotate(540deg)}}
+
+/* Siegel selbst drücken */
+.cert-seal{position:relative;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none}
+.cert-seal .cs-hint{display:none}
+.cert-seal.empty{background:conic-gradient(#9a1a20 calc(var(--p,0)*360deg),rgba(143,28,32,.08) 0)!important;border-radius:50%;border:2px dashed rgba(143,28,32,.6);filter:none}
+.cert-seal.empty::after{content:'';position:absolute;inset:14%;border-radius:50%;background:#efe2c4}
+.cert-seal.empty .cs-hint{display:flex;position:absolute;inset:0;z-index:1;align-items:center;justify-content:center;font:clamp(8px,2vw,11px) 'Special Elite';color:#8f1c20;letter-spacing:.04em;animation:breathe 1.6s ease-in-out infinite}
+.cert-seal.pressing{transform:scale(.94)}
+.cert-seal.stamped{animation:stampin .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stampin{0%{transform:scale(1.9);opacity:.2}60%{transform:scale(.92);opacity:1}100%{transform:none}}
+@keyframes breathe{0%,100%{opacity:.55}50%{opacity:1}}
+.cert:not(.sealed){cursor:default}
+/* Letzter Umschlag */
+.secret-wrap{display:none;text-align:center;padding:26px 0 36px}
+.secret-wrap.on{display:block;animation:slideup .8s cubic-bezier(.2,1.2,.4,1)}
+.secret-env{position:relative;width:200px;height:132px;margin:0 auto 14px;background:linear-gradient(180deg,#efe2c4,#dcc89c);border-radius:6px;box-shadow:0 18px 40px rgba(0,0,0,.6);animation:float 3s ease-in-out infinite}
+.se-flap{position:absolute;left:0;right:0;top:0;height:70px;background:linear-gradient(180deg,#e6d6b0,#d3bd8c);clip-path:polygon(0 0,100% 0,50% 100%)}
+.se-seal{position:absolute;left:50%;top:48px;width:48px;height:48px;transform:translateX(-50%);background:url(a/siegel.svg) center/contain no-repeat;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.secret-q{font:600 18px 'Playfair Display';color:#f3e9d2;margin:6px 0 2px}
+.secret-from{font:italic 15px Lora;color:#d8c49a;margin:0 0 14px}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+.secret-page{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(30px + env(safe-area-inset-top)) 18px 30px;gap:18px}
+.secret-letter{max-width:520px;width:100%;text-align:center;padding:28px 24px}
+.secret-letter.in{animation:letterin 1.2s cubic-bezier(.2,1.1,.3,1)}
+@keyframes letterin{0%{transform:translateY(60px) scale(.9) rotate(-2deg);opacity:0}100%{transform:none;opacity:1}}
+.secret-letter h2{font:800 30px 'Playfair Display';margin:8px 0 14px}
+.secret-text{font:italic 19px/1.55 Lora;white-space:pre-wrap;color:#2a1d14}
+.secret-sign{font:700 22px 'Playfair Display';color:#8f1c20;margin-top:16px}
+/* Finale Bericht auf Papier */
+.paper .report.big{background:rgba(255,250,235,.55);border:1px solid rgba(90,62,42,.35)}
+.final-help .btn.ghost{color:#5a3e2a;border-color:rgba(90,62,42,.55)}
+.cert-seal.empty .cs-hint{font-size:clamp(9px,2.3vw,12px);font-weight:700}
+.cert-seal.empty .cs-hint{font-size:clamp(7px,1.75vw,9px);letter-spacing:0}

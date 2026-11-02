@@ -139,7 +139,10 @@
     <div class="paper final" id="f-report-card">
       <div class="kick red">24. Dezember 1891 · Heiligabend</div>
       <h2>Dein Ermittlungsbericht</h2>
+      <p class="final-hint" id="final-hint">Setze deine 24 Spuren zum Ermittlungsbericht zusammen. Tipp die Buchstaben der Reihe nach an. Ein Tipp auf einen Buchstaben im Bericht legt ihn zurück.</p>
       <div class="report big" id="final-report"></div>
+      <div class="pool big" id="final-pool"></div>
+      <div class="final-help" id="final-help"><button class="btn ghost sm" id="btn-reveal">Einen Buchstaben aufdecken</button><button class="btn ghost sm" id="btn-order">Bericht ordnen lassen</button></div>
       <div id="accuse">
         <p class="question">Der Fall ist gelöst, wenn du weißt, wer es war. Wer im Haus kennt sich mit Uhrwerken aus? Tipp auf den Täter.</p>
         <div class="suspects pick" id="accuse-list"></div>
@@ -159,7 +162,10 @@
           <div class="gc-door"><div class="gc-glass"></div><div class="gc-knob"></div></div>
         </div>
         <div class="gc-base"></div>
+        <div class="gc-roll">💎</div>
       </div>
+      <div class="gc-progwrap"><div class="gc-prog"></div></div>
+      <button class="btn sm" id="clock-btn" style="display:none"></button>
     </div>
     <div id="verdict" class="paper verdict"></div>
     <div id="cert-wrap" class="cert-wrap">
@@ -172,18 +178,43 @@
           <div class="cert-sub">zum</div>
           <div class="cert-rank">Meisterdetektiv</div>
           <div class="cert-text">ernannt. In 24 Tagen wurden alle Beweisstücke gesichert, der Fall des Weihnachtsdiamanten aufgeklärt und der Täter Silas Tolliver überführt.</div>
-          <div class="cert-foot"><div><span class="sig">Grimsby</span><small>Inspektor Grimsby</small></div><div class="cert-seal"></div><div><span class="sig2">24.12.1891</span><small>London</small></div></div>
+          <div class="cert-foot"><div><span class="sig">Grimsby</span><small>Inspektor Grimsby</small></div><div class="cert-seal"><span class="cs-hint">Halten</span></div><div><span class="sig2">24.12.1891</span><small>London</small></div></div>
         </div>
       </div>
+      <p class="cert-tap">Tipp auf die Urkunde, um sie groß anzusehen und als PDF zu speichern.</p>
       <div class="cert-name-edit" id="cert-edit"><input id="cert-input" maxlength="32" placeholder="Dein Name für die Urkunde"><button class="btn sm" id="cert-set">Eintragen</button></div>
       <div class="cert-btns"><button class="btn" id="cert-save">Urkunde speichern</button><button class="btn ghost" id="cert-share">Teilen</button></div>
       <button class="btn ghost" id="final-back">Zurück zum Schreibtisch</button>
     </div>
   </div>
+  <div id="secret-wrap" class="secret-wrap">
+    <div class="secret-env"><div class="se-flap"></div><div class="se-seal"></div></div>
+    <p class="secret-q">Da ist noch ein letzter Umschlag für dich.</p>
+    <p class="secret-from" id="secret-from"></p>
+    <button class="btn" id="secret-open">Umschlag öffnen</button>
+  </div>
 </section>
 
 <div id="toast" class="toast"></div>
 <audio id="music" src="a/musik.mp3" loop preload="auto"></audio>
+<section id="s-secret" class="screen">
+  <div class="secret-page">
+    <div class="paper secret-letter" id="secret-letter">
+      <div class="kick red">24. Dezember · Persönlich</div>
+      <h2 id="secret-to">Für dich</h2>
+      <p class="secret-text" id="secret-text"></p>
+      <p class="secret-sign" id="secret-sign"></p>
+    </div>
+    <button class="btn ghost" id="secret-back">Zurück zur Urkunde</button>
+  </div>
+</section>
+<div id="cert-modal" class="cert-modal" aria-hidden="true">
+  <div class="cm-box">
+    <img id="cert-big" alt="Urkunde Meisterdetektiv">
+    <div class="cm-btns"><button class="btn" id="cert-pdf">Als PDF speichern</button><button class="btn ghost" id="cert-close">Schließen</button></div>
+    <p class="cm-note">Das PDF ist im A4 Querformat und lässt sich direkt ausdrucken.</p>
+  </div>
+</div>
 <script src="gate.js"></script>
 <script src="data.js"></script>
 <script src="stimmen.js"></script>

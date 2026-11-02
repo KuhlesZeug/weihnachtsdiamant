@@ -11,7 +11,7 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 /* ---------- Geschenk ---------- */
 let gift=null,giftOk=false;
 try{const g=params.get('g');if(g){gift=kzDec(g)}}catch(e){}
-const ready=(async()=>{if(gift&&gift.an&&gift.k){giftOk=(await kzSig(gift.an,gift.von||'',gift.m||''))===gift.k}
+const ready=(async()=>{if(gift&&gift.an&&gift.k){const sec=gift.s?kzShow(gift.s):'';giftOk=(await kzSig(gift.an,gift.von||'',kzMsg(gift.m||'',sec)))===gift.k;if(giftOk)gift.sec=sec}
  if(giftOk){$('#giftline').textContent='Ein Fall für '+gift.an+(gift.von?'. Überreicht von '+gift.von+'.':'.');if(gift.m){const m=$('#giftmsg');m.textContent=gift.m+(gift.von?'\n\n'+gift.von:'');m.style.display='block'}st.act=1;save()}
  if(!st.act)$('#codebox').style.display='block'})();
 async function access(){await ready;if(st.act)return true;const v=kzNormCode($('#code').value);if(v&&await kzSha(v)===KZ_H){st.act=1;save();$('#codebox').style.display='none';return true}
@@ -51,8 +51,10 @@ function startAmb(){if(ambOn)return;ambOn=true;const c=ac();
  ambTimer=setInterval(()=>{if(Math.random()<.5)noise(.02+Math.random()*.03,2000+Math.random()*3000,2,.04+Math.random()*.05);SFX.tick()},1000)}
 const music=$('#music');music.volume=.07;
 const voice=new Audio('a/stimmen.mp3');voice.preload='auto';let vStop=null;
-function vDone(){clearTimeout(vStop);try{voice.pause()}catch(e){}music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on')}
-function say(k){vDone();if(!st.sound||st.voice===false||!window.VOX||!VOX[k])return;const [s,d]=VOX[k];const go=()=>{voice.currentTime=s;music.volume=.02;voice.play().then(()=>{$('#btn-say')&&$('#btn-say').classList.add('on');vStop=setTimeout(vDone,d*1000+250)}).catch(()=>{})};if(voice.readyState>=1)go();else{voice.load();voice.addEventListener('loadedmetadata',go,{once:true})}}
+function vDone(){clearTimeout(vStop);try{voice.pause()}catch(e){}try{for(const k in vf)if(vf[k]&&vf[k].pause)vf[k].pause()}catch(e){}music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on')}
+const VOXF={spuren:'a/spuren.mp3',cert:'a/urkunde.mp3'};const vf={};
+function say(k){vDone();if(VOXF[k]){if(!st.sound||st.voice===false)return;const au=vf[k]||(vf[k]=new Audio(VOXF[k]));try{au.currentTime=0}catch(e){}music.volume=.02;au.onended=()=>{music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on')};vStop=null;au.play().catch(()=>{});vf._cur=au;return}
+ if(!st.sound||st.voice===false||!window.VOX||!VOX[k])return;const [s,d]=VOX[k];const go=()=>{voice.currentTime=s;music.volume=.02;voice.play().then(()=>{$('#btn-say')&&$('#btn-say').classList.add('on');vStop=setTimeout(vDone,d*1000+250)}).catch(()=>{})};if(voice.readyState>=1)go();else{voice.load();voice.addEventListener('loadedmetadata',go,{once:true})}}
 function hush(){vDone()}
 function setSound(on){st.sound=on;save();if(!on)hush();if(master)master.gain.value=on?1:0;music.muted=!on;$('#btn-sound').textContent=on?'🔊':'🔇'}
 
@@ -79,7 +81,10 @@ $('#btn-akte').onclick=()=>{SFX.paper();renderAkte();show('#s-akte')};
 $('#btn-akte-back').onclick=()=>{SFX.paper();show('#s-desk')};
 
 /* ---------- Schreibtisch ---------- */
-function renderReport(box,big){box.innerHTML='';let i=0;WORDS.forEach(w=>{const g=el('div','word');for(let k=0;k<w;k++){const d=i+1;const s=el('div','slot',st.done[d]?SOL[i]:'');s.dataset.d=d;g.appendChild(s);i++}box.appendChild(g)})}
+const PERM=[17,3,22,9,14,1,20,6,11,24,4,16,8,19,2,13,23,7,10,21,5,15,18,12];
+function renderReport(box,big){box.innerHTML='';let i=0;const wr=el('div','words');WORDS.forEach(w=>{const g=el('div','word');for(let k=0;k<w;k++){const s=el('div','slot','');s.dataset.i=i;g.appendChild(s);i++}wr.appendChild(g)});box.appendChild(wr);
+ if(big)return;const n=Object.keys(st.done).length;const lab=el('div','poollab',n?'Deine Spurensammlung · '+n+' von 24':'Deine Spurensammlung · noch leer');box.appendChild(lab);
+ const pool=el('div','pool');PERM.forEach(d=>{if(st.done[d]){const t=el('span','tile',SOL[d-1]);t.dataset.d=d;pool.appendChild(t)}});box.appendChild(pool)}
 function renderDesk(){renderReport($('#report'));const g=$('#grid');g.innerHTML='';const td=todayNr();
  for(let d=1;d<=24;d++){const b=el('button','env');b.style.setProperty('--r',((d*37)%7-3)*.6+'deg');b.style.setProperty('--i',d);const u=unlocked(d);
   if(st.done[d])b.classList.add('open');else if(!u)b.classList.add('locked');if(d===td&&!st.done[d])b.classList.add('today');
@@ -98,7 +103,7 @@ function rbDraw(){const [cx,cy]=RB.C,[kx,ky]=RB.k,set=(id,d)=>document.getElemen
  const p=RB.p||[kx+42,ky+92];const px=p[0]-kx,py=p[1]-ky;set('tailR',`M0 0 Q${px*0.4+10} ${py*0.6+18} ${px} ${py}`);
  set('tailL',`M0 0 Q${-18+t*6} ${36-t*10} ${-36+t*16} ${80-t*30}`)}
 function openEnv(d){curDay=d;const e=$('#envelope');e.className='envelope';$('#rib').setAttribute('class','rib');RB.k=[200,150];RB.p=null;RB.t=0;RB.free=false;rbDraw();
- $('#env-hint').style.visibility='visible';$('#env-date').textContent=d+'. Dezember 1891';show('#s-env')}
+ $('#env-hint').style.visibility='visible';$('#env-date').textContent=d==='secret'?'Persönlich für '+(gift&&gift.an||'dich'):d+'. Dezember 1891';document.querySelector('#env-card .mini-stamp').textContent=d==='secret'?'Persönlich':'Beweisstück';show('#s-env')}
 (function(){const sv=$('#rib');let drag=false,last=0,lp=null;
  const toV=e=>{const r=sv.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return [(p.clientX-r.left)/r.width*400,(p.clientY-r.top)/r.height*300]};
  const start=e=>{if(RB.free)return;ac();drag=true;sv.classList.add('dragging');move(e);e.preventDefault()};
@@ -112,10 +117,10 @@ function openEnv(d){curDay=d;const e=$('#envelope');e.className='envelope';$('#r
  function untie(v){if(RB.free)return;RB.free=true;drag=false;const e=$('#envelope');sv.classList.remove('dragging');sv.classList.add('free');$('#env-hint').style.visibility='hidden';
   SFX.ribbon();if(navigator.vibrate)navigator.vibrate([30,40,60]);
   const r=e.getBoundingClientRect();for(let i=0;i<16;i++){const s=el('div','sparkle');s.style.left=(r.left+r.width/2)+'px';s.style.top=(r.top+r.height/2)+'px';const a=Math.random()*6.28,d=60+Math.random()*90;s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',Math.sin(a)*d+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}
-  setTimeout(()=>SFX.seal(),300);setTimeout(()=>{SFX.paper();e.classList.add('opened')},1000);setTimeout(()=>{st.open[curDay]=1;save();openCase(curDay)},2500)}
+  setTimeout(()=>SFX.seal(),300);setTimeout(()=>{SFX.paper();e.classList.add('opened')},1000);setTimeout(()=>{if(curDay==='secret'){showSecret();return}st.open[curDay]=1;save();openCase(curDay)},2500)}
  sv.addEventListener('touchstart',start,{passive:false});sv.addEventListener('mousedown',start);
  addEventListener('touchmove',move,{passive:false});addEventListener('mousemove',move);addEventListener('touchend',end);addEventListener('mouseup',end);})();
-$('#btn-env-back').onclick=()=>{renderDesk();show('#s-desk')};
+$('#btn-env-back').onclick=()=>{if(curDay==='secret'){show('#s-final');return}renderDesk();show('#s-desk')};
 
 /* ---------- Beweisstück ---------- */
 let typer=null;
@@ -139,10 +144,10 @@ function openCase(d){curDay=d;const D=DAYS[d-1];show('#s-case');setTimeout(()=>s
  function check(v){const ok=(D.a||[]).some(a=>norm(a)===norm(v))||(D.loose||[]).some(a=>norm(v).includes(norm(a)));
   if(ok){showSolved(true)}else{SFX.no();const p=$('.paper');p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake');if(navigator.vibrate)navigator.vibrate([40,40,40]);toast('Das passt noch nicht. Schau dir die Spur noch einmal an.')}}
  ctx.check=check;
- function showSolved(fresh){const L=D.L;sv.innerHTML='<span class="stamp2">GELÖST</span>Dein Buchstabe:<b>'+L+'</b><br><span style="font-size:14px">'+D.how+'. Eingetragen in Feld '+d+' deines Ermittlungsberichts.</span>';sv.style.display='block';
+ function showSolved(fresh){const L=D.L;sv.innerHTML='<span class="stamp2">GELÖST</span>Dein Buchstabe:<b>'+L+'</b><br><span style="font-size:14px">'+D.how+'. Er wandert in deine Spurensammlung. Am Heiligabend setzt du alle Spuren zusammen.</span>';sv.style.display='block';
   if(fresh){st.done[d]=1;save();SFX.seal();const fl=el('div','flyletter',L);document.body.appendChild(fl);setTimeout(()=>fl.remove(),1700);setTimeout(SFX.ok,250);if(navigator.vibrate)navigator.vibrate([20,60,20]);setTimeout(()=>sv.scrollIntoView({behavior:'smooth',block:'center'}),400)}
   if(d===24&&Object.keys(st.done).length===24){const fb=el('button','btn','Zum Finale');fb.style.marginTop='12px';fb.onclick=finale;sv.appendChild(el('br'));sv.appendChild(fb)}}}
-$('#btn-case-back').onclick=()=>{hush();SFX.paper();renderDesk();show('#s-desk');setTimeout(()=>{const s=document.querySelector('#report .slot[data-d="'+curDay+'"]');if(s&&st.done[curDay]){s.classList.add('new')}},300)};
+$('#btn-case-back').onclick=()=>{hush();SFX.paper();renderDesk();show('#s-desk');setTimeout(()=>{const s=document.querySelector('#report .tile[data-d="'+curDay+'"]');if(s&&st.done[curDay]){s.classList.add('new')}},300)};
 
 /* ---------- Widgets ---------- */
 function svgEl(t,a){const e=document.createElementNS('http://www.w3.org/2000/svg',t);for(const k in a)e.setAttribute(k,a[k]);return e}
@@ -237,11 +242,11 @@ const WIDGETS={
  watch(ctx){const box=el('div','watch');const s=svgEl('svg',{viewBox:'-110 -110 220 220'});s.appendChild(svgEl('circle',{r:104,fill:'#b8913f'}));s.appendChild(svgEl('circle',{r:96,fill:'#2b241c'}));
   const gear=(x,y,r,t,cls)=>{const g=svgEl('g',{class:'gear '+(cls||'')});let d='';for(let i=0;i<t;i++){const a=i/t*Math.PI*2,a2=(i+.5)/t*Math.PI*2;d+=(i?'L':'M')+(x+Math.cos(a)*r)+' '+(y+Math.sin(a)*r)+' L'+(x+Math.cos(a)*(r+7))+' '+(y+Math.sin(a)*(r+7))+' L'+(x+Math.cos(a2)*(r+7))+' '+(y+Math.sin(a2)*(r+7))+' L'+(x+Math.cos(a2)*r)+' '+(y+Math.sin(a2)*r)}g.appendChild(svgEl('path',{d:d+'Z',fill:'#d8b46a',stroke:'#7a5a26'}));g.appendChild(svgEl('circle',{cx:x,cy:y,r:r*.35,fill:'#2b241c'}));return g};
   s.append(gear(-30,-20,34,14),gear(38,-28,20,10,'r'),gear(28,40,26,12),gear(-36,50,12,9,'r'));
-  const dia=svgEl('text',{x:-6,y:8,'font-size':22});dia.textContent='💎';dia.style.opacity=0;dia.style.transition='opacity 1s 1.4s';s.appendChild(dia);
+  
   const lid=svgEl('svg',{viewBox:'-110 -110 220 220',class:'lid'});lid.appendChild(svgEl('circle',{r:104,fill:'#c9a24e',stroke:'#7a5a26','stroke-width':3}));lid.appendChild(svgEl('circle',{r:80,fill:'none',stroke:'#7a5a26'}));const lt=svgEl('text',{y:6,'text-anchor':'middle','font-family':'Special Elite','font-size':16,fill:'#5a3e1a'});lt.textContent='FAIRBANK & CO.';lid.appendChild(lt);
   const seal=svgEl('rect',{x:-40,y:88,width:80,height:16,fill:'#8f1c20'});lid.appendChild(seal);
-  box.append(s,lid);const b=el('button','btn','Siegel brechen und aufklappen');b.style.display='block';b.style.margin='12px auto 0';b.onclick=()=>{SFX.seal();setTimeout(()=>{SFX.flip();box.classList.add('open');dia.style.opacity=1;setTimeout(SFX.chime,1500)},300);b.remove()};
-  if(ctx.solved){box.classList.add('open');dia.style.opacity=1;b.remove()}ctx.W.append(box,b)}
+  box.append(s,lid);const b=el('button','btn','Siegel brechen und aufklappen');b.style.display='block';b.style.margin='12px auto 0';b.onclick=()=>{SFX.seal();setTimeout(()=>{SFX.flip();box.classList.add('open');setTimeout(SFX.chime,1500)},300);b.remove()};
+  if(ctx.solved){box.classList.add('open');b.remove()}ctx.W.append(box,b)}
 };
 function numtab(){const t=el('div','numtab');'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((c,i)=>t.appendChild(el('div','',c+'<br>'+(i+1))));t.style.marginTop='12px';return t}
 
@@ -252,20 +257,47 @@ function renderAkte(){const s=$('#suspects');s.innerHTML='';SUSPECTS.forEach(x=>
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let finRun=0;
 async function finale(){const run=++finRun;hush();show('#s-final');['#scene-clock','#verdict','#cert-wrap'].forEach(x=>$(x).classList.remove('on'));$('#gclock').className='gclock';
- const box=$('#final-report');renderReport(box,true);const slots=[...box.querySelectorAll('.slot')];slots.forEach(s=>{s.dataset.l=s.textContent;s.textContent=''});
- const acc=$('#accuse');acc.style.opacity=0;acc.style.pointerEvents='none';const l=$('#accuse-list');l.innerHTML='';
+ const box=$('#final-report');renderReport(box,true);const slots=[...box.querySelectorAll('.slot')];
+ const acc=$('#accuse');acc.style.opacity=0;acc.style.pointerEvents='none';acc.style.display='none';const l=$('#accuse-list');l.innerHTML='';l.classList.remove('done');
  SUSPECTS.forEach(x=>{const b=el('button','scard','<span class="ic">'+x.i+'</span><b>'+x.n+'</b>'+x.r+'<span class="sstamp"></span>');b.onclick=()=>accuse(b,x);l.appendChild(b)});
- await sleep(500);for(const s of slots){if(run!==finRun)return;s.textContent=s.dataset.l;s.classList.add('new');SFX.key();await sleep(85)}
- tone(1760,.5,'sine',.12);await sleep(400);acc.style.transition='opacity .8s';acc.style.opacity=1;acc.style.pointerEvents='auto'}
+ const pool=$('#final-pool');pool.innerHTML='';const tiles=PERM.map(d=>{const t=el('button','tile',SOL[d-1]);t.dataset.l=SOL[d-1];pool.appendChild(t);return t});
+ const help=$('#final-help');help.style.display='flex';$('#final-hint').style.display='block';let done=false;
+ const put=(t,s)=>{s.textContent=t.dataset.l;s._t=t;t.classList.add('used');s.classList.remove('wrong')};
+ const take=s=>{if(!s._t||s.classList.contains('lock'))return;s._t.classList.remove('used');s._t=null;s.textContent=''};
+ const check=()=>{if(done||slots.some(s=>!s._t))return;const w=slots.map(s=>s.textContent).join('');
+  if(w===SOL){done=true;solvedReport()}else{SFX.no();slots.forEach((s,i)=>{if(s.textContent!==SOL[i])s.classList.add('wrong')});setTimeout(()=>slots.forEach(s=>s.classList.remove('wrong')),900);toast('Da stimmt noch etwas nicht. Tipp auf einen Buchstaben im Bericht, um ihn zurückzulegen.')}};
+ tiles.forEach(t=>t.onclick=()=>{if(done||t.classList.contains('used'))return;const s=slots.find(x=>!x._t);if(!s)return;SFX.key();put(t,s);check()});
+ slots.forEach(s=>s.onclick=()=>{if(done)return;if(s._t){SFX.tap();take(s)}});
+ const reveal=()=>{const i=slots.findIndex((s,k)=>s.textContent!==SOL[k]||!s._t);if(i<0)return false;const s=slots[i];if(s._t)take(s);
+  let t=tiles.find(x=>!x.classList.contains('used')&&x.dataset.l===SOL[i]);
+  if(!t){const o=slots.find((x,k)=>k!==i&&x._t&&x.textContent===SOL[i]&&x.textContent!==SOL[k]);if(o){t=o._t;take(o)}}
+  if(!t)return false;put(t,s);s.classList.add('lock','new');return true};
+ $('#btn-reveal').onclick=()=>{if(done)return;SFX.paper();reveal();check()};
+ $('#btn-order').onclick=async()=>{if(done)return;SFX.paper();help.style.pointerEvents='none';while(!done&&reveal()){SFX.key();await sleep(70)}help.style.pointerEvents='';check()};
+ function solvedReport(){help.style.display='none';$('#final-hint').style.display='none';slots.forEach(s=>s.classList.add('ok'));SFX.ok();tone(1760,.5,'sine',.12);
+  setTimeout(()=>{acc.style.display='block';acc.style.transition='opacity .8s';acc.style.opacity=1;acc.style.pointerEvents='auto';setTimeout(()=>acc.scrollIntoView({behavior:'smooth',block:'center'}),150)},700)}
+ await sleep(400);if(run!==finRun)return;say('spuren')}
 function accuse(b,x){if(b.classList.contains('alibi')||$('#accuse-list').classList.contains('done'))return;
  if(x.n!=='Silas Tolliver'){SFX.no();b.querySelector('.sstamp').textContent='ALIBI';b.classList.add('alibi');if(navigator.vibrate)navigator.vibrate([30,30,30]);toast(x.n+' hat ein Alibi. Lies deinen Bericht noch einmal.');return}
  $('#accuse-list').classList.add('done');b.querySelector('.sstamp').textContent='SCHULDIG';b.classList.add('guilty');tone(70,.6,'sine',.7);noise(.35,250,1,.6);if(navigator.vibrate)navigator.vibrate([60,40,120]);
  const c=$('#f-report-card');c.classList.remove('quake');void c.offsetWidth;c.classList.add('quake');setTimeout(clockScene,1500)}
-async function clockScene(){const sc=$('#scene-clock'),g=$('#gclock'),cap=$('#clock-cap');sc.classList.add('on');cap.textContent='Die kaputte Standuhr im Flur tickt wieder …';setTimeout(()=>sc.scrollIntoView({behavior:'smooth',block:'center'}),100);
- g.classList.add('swing');for(let i=0;i<6;i++){tone(i%2?1500:1300,.06,'square',.05);noise(.04,4000,5,.15);await sleep(560)}
- g.classList.remove('swing');g.classList.add('stop');cap.textContent='Silas Tolliver hat sie geöffnet. Und darin …';await sleep(700);
- const c=ac(),n=noise(1.2,300,6,.25);n.bf.frequency.exponentialRampToValueAtTime(900,c.currentTime+1.1);g.classList.add('open');await sleep(1100);
- g.classList.add('gem');SFX.chime();sparkleAt($('.gc-gem'),24);cap.textContent='… funkelt der Weihnachtsdiamant!';await sleep(1600);verdict()}
+async function clockScene(){const sc=$('#scene-clock'),g=$('#gclock'),cap=$('#clock-cap'),btn=$('#clock-btn');sc.classList.add('on');g.className='gclock swing';cap.textContent='Die kaputte Standuhr im Flur tickt wieder … Tipp auf die Tür, um sie zu öffnen.';setTimeout(()=>sc.scrollIntoView({behavior:'smooth',block:'center'}),100);
+ let ticking=true;(async()=>{let i=0;while(ticking){tone(i%2?1500:1300,.06,'square',.05);noise(.04,4000,5,.15);i++;await sleep(560)}})();
+ await new Promise(res=>{const door=$('.gc-door');const go=()=>{door.removeEventListener('click',go);res()};door.addEventListener('click',go);btn.textContent='Tür öffnen';btn.style.display='inline-block';btn.onclick=go});
+ ticking=false;g.classList.remove('swing');g.classList.add('stop');
+ try{if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function')DeviceMotionEvent.requestPermission().catch(()=>{})}catch(e){}
+ const c=ac(),n=noise(1.2,300,6,.25);n.bf.frequency.exponentialRampToValueAtTime(900,c.currentTime+1.1);g.classList.add('open');await sleep(1200);
+ cap.textContent='Im Uhrwerk klemmt etwas … Schüttle dein Handy oder wisch schnell hin und her!';btn.textContent='Uhr schütteln';
+ await new Promise(res=>{let k=0,last=0,lx=null,dir=0;const NEED=5;
+  const hit=()=>{const now=performance.now();if(now-last<220)return;last=now;k++;g.classList.remove('rattle');void g.offsetWidth;g.classList.add('rattle');noise(.12,900+k*150,3,.35);tone(2200+k*120,.05,'triangle',.06);if(navigator.vibrate)navigator.vibrate(40);
+   const p=$('.gc-prog');p.style.width=Math.min(100,k/NEED*100)+'%';if(k>=NEED){cleanup();res()}};
+  const mo=e=>{const a=e.accelerationIncludingGravity||e.acceleration;if(!a)return;const m=Math.hypot(a.x||0,a.y||0,a.z||0);if(m>22)hit()};
+  const pm=e=>{const x=e.touches?e.touches[0].clientX:e.clientX;if(lx!==null){const d=x-lx;if(Math.abs(d)>6){const nd=Math.sign(d);if(nd!==dir&&dir!==0)hit();dir=nd}}lx=x};
+  const pe=()=>{lx=null;dir=0};
+  const cleanup=()=>{removeEventListener('devicemotion',mo);g.removeEventListener('touchmove',pm);g.removeEventListener('mousemove',pm);g.removeEventListener('touchend',pe);g.removeEventListener('mouseleave',pe);btn.onclick=null};
+  addEventListener('devicemotion',mo);g.addEventListener('touchmove',pm,{passive:true});g.addEventListener('mousemove',pm);g.addEventListener('touchend',pe);g.addEventListener('mouseleave',pe);btn.onclick=hit});
+ btn.style.display='none';g.classList.remove('rattle');g.classList.add('roll');SFX.paper();setTimeout(()=>{tone(1200,.08,'triangle',.08);tone(900,.08,'triangle',.06,.25);tone(700,.08,'triangle',.05,.5)},500);
+ await sleep(1500);SFX.chime();sparkleAt($('.gc-roll'),24);cap.textContent='… da kullert der Weihnachtsdiamant heraus!';await sleep(1800);verdict()}
 function sparkleAt(node,n){const r=node.getBoundingClientRect();for(let i=0;i<n;i++){const s=el('div','sparkle');s.style.left=(r.left+r.width/2)+'px';s.style.top=(r.top+r.height/2)+'px';const a=Math.random()*6.28,d=50+Math.random()*120;s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',Math.sin(a)*d+'px');s.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),1400)}}
 function verdict(){const v=$('#verdict');say('fin');
  v.innerHTML='<div class="stamp-big">FALL GELÖST</div><p class="story">Der Täter ist <b>Silas Tolliver</b>, der Uhrmacher. In der Nacht kam er mit seiner Werkzeugtasche zurück, öffnete die kaputte Standuhr und versteckte den Weihnachtsdiamanten im Uhrwerk. Darum tickte sie am Morgen wieder.</p><p class="story">Lady Ashcombe hält ihren Diamanten wieder in den Händen, und Inspektor Grimsby lässt ausrichten: Ohne dich hätte er diesen Fall nie gelöst.</p><p class="story center"><b>Frohe Weihnachten, Ermittler!</b></p>'+(gift&&gift.von?'<p class="story center small2">Diesen Fall hat dir '+esc(gift.von)+' geschenkt.</p>':'');
@@ -273,7 +305,24 @@ function verdict(){const v=$('#verdict');say('fin');
  for(let i=0;i<10;i++)setTimeout(()=>tone(900+Math.random()*900,.5,'sine',.05),i*140);
  setTimeout(showCert,(window.VOX&&VOX.fin?VOX.fin[1]*1000:9000)+800)}
 function certName(){return (st.name||(gift&&gift.an)||'').trim()}
-function showCert(){const w=$('#cert-wrap');w.classList.add('on');const n=certName();$('#cert-name').textContent=n||'Ermittler';$('#cert-edit').style.display=n?'none':'flex';SFX.paper();setTimeout(()=>{w.scrollIntoView({behavior:'smooth',block:'start'});sparkleAt($('.cert-seal'),14)},300)}
+function showCert(){const w=$('#cert-wrap');w.classList.add('on');const n=certName();$('#cert-name').textContent=n||'Ermittler';$('#cert-edit').style.display=n?'none':'flex';SFX.paper();sealState();setTimeout(()=>{w.scrollIntoView({behavior:'smooth',block:'start'});say('cert')},300)}
+function sealState(){const s=$('.cert-seal'),ok=!!st.sealed;s.classList.toggle('empty',!ok);$('.cert-btns').style.display=ok?'flex':'none';$('#cert').classList.toggle('sealed',ok);
+ $('.cert-tap').textContent=ok?'Tipp auf die Urkunde, um sie groß anzusehen und als PDF zu speichern.':'Halte deinen Finger auf das leere Siegelfeld, um deine Urkunde zu besiegeln.';
+ if(ok)secretState()}
+(function(){const s=$('.cert-seal');let t0=0,raf=0,on=false;const H=1300;
+ const stop=()=>{on=false;cancelAnimationFrame(raf);if(!st.sealed){s.style.setProperty('--p','0');s.classList.remove('pressing')}};
+ const step=n=>{if(!on)return;const p=Math.min(1,(n-t0)/H);s.style.setProperty('--p',p.toFixed(3));if(Math.random()<.25)noise(.03,300+p*600,2,.05);if(p>=1){on=false;stamp();return}raf=requestAnimationFrame(step)};
+ const start=e=>{if(st.sealed||!$('#cert-wrap').classList.contains('on'))return;e.preventDefault();e.stopPropagation();ac();on=true;t0=performance.now();s.classList.add('pressing');if(navigator.vibrate)navigator.vibrate(15);raf=requestAnimationFrame(step)};
+ function stamp(){st.sealed=1;save();s.classList.remove('pressing');s.classList.add('stamped');SFX.seal();tone(60,.5,'sine',.7);if(navigator.vibrate)navigator.vibrate([20,30,90]);sparkleAt(s,18);setTimeout(()=>{s.classList.remove('stamped');sealState()},700)}
+ s.addEventListener('pointerdown',start);s.addEventListener('pointerup',stop);s.addEventListener('pointerleave',stop);s.addEventListener('pointercancel',stop);s.addEventListener('click',e=>e.stopPropagation());s.addEventListener('contextmenu',e=>e.preventDefault())})();
+function secretState(){const w=$('#secret-wrap');if(!gift||!gift.sec){w.classList.remove('on');return}
+ $('#secret-from').textContent=gift.von?'Von '+gift.von:'Von jemandem, der dich lieb hat';$('#secret-open').textContent=st.secretRead?'Botschaft noch einmal lesen':'Umschlag öffnen';
+ if(!w.classList.contains('on')){setTimeout(()=>{w.classList.add('on');SFX.chime();setTimeout(()=>w.scrollIntoView({behavior:'smooth',block:'center'}),200)},st.secretRead?0:1200)}}
+$('#secret-open').onclick=()=>{SFX.tap();openEnv('secret')};
+function showSecret(){st.secretRead=1;save();show('#s-secret');$('#secret-to').textContent='Für '+(gift.an||'dich');$('#secret-text').textContent=gift.sec;$('#secret-sign').textContent=gift.von||'';
+ SFX.chime();const l=$('#secret-letter');l.classList.remove('in');void l.offsetWidth;l.classList.add('in');setTimeout(()=>sparkleAt(l,30),500);
+ for(let i=0;i<14;i++)setTimeout(()=>tone(700+Math.random()*1100,.7,'sine',.04),i*170)}
+$('#secret-back').onclick=()=>{SFX.tap();show('#s-final');secretState();setTimeout(()=>$('#cert-wrap').scrollIntoView({block:'start'}),50)};
 $('#cert-set').onclick=()=>{const v=$('#cert-input').value.trim();if(!v){toast('Bitte trag einen Namen ein.');return}st.name=v;save();$('#cert-name').textContent=v;$('#cert-edit').style.display='none';SFX.seal();sparkleAt($('#cert-name'),10)};
 async function certCanvas(){try{await document.fonts.ready}catch(e){}const W=1600,H=1130,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#f3e8cf');g.addColorStop(1,'#e2cfa6');x.fillStyle=g;x.fillRect(0,0,W,H);
@@ -296,4 +345,29 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 
 // Direkt zum Schreibtisch, wenn schon gespielt
 if(Object.keys(st.open).length&&!params.get('intro')){$('#btn-start').textContent='Weiter ermitteln';$('#btn-start').onclick=()=>{ac();if(st.act)goDesk();else access().then(ok=>ok&&goDesk())}}
+
+/* ---------- Urkunde groß anzeigen und als PDF ---------- */
+function kzPdf(jpg,w,h){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const add=x=>{const b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length};
+ const PW=842,PH=595,M=24,sc=Math.min((PW-2*M)/w,(PH-2*M)/h),dw=(w*sc).toFixed(2),dh=(h*sc).toFixed(2),dx=((PW-w*sc)/2).toFixed(2),dy=((PH-h*sc)/2).toFixed(2);
+ const cs=`q ${dw} 0 0 ${dh} ${dx} ${dy} cm /Im0 Do Q`;
+ add('%PDF-1.4\n');
+ const obj=(n,body)=>{offs[n]=len;add(n+' 0 obj\n');add(body);add('\nendobj\n')};
+ obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+ obj(2,'<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+ obj(3,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>`);
+ obj(4,`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`);
+ offs[5]=len;add(`5 0 obj\n<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);add(jpg);add('\nendstream\nendobj\n');
+ const x=len;let t='xref\n0 6\n0000000000 65535 f \n';for(let i=1;i<=5;i++)t+=String(offs[i]).padStart(10,'0')+' 00000 n \n';
+ add(t+`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${x}\n%%EOF`);
+ return new Blob(parts,{type:'application/pdf'})}
+async function certOpen(){if(!st.sealed)return;SFX.paper();const cv=await certCanvas();$('#cert-big').src=cv.toDataURL('image/png');const m=$('#cert-modal');m.classList.add('on');m.setAttribute('aria-hidden','false')}
+function certClose(){const m=$('#cert-modal');m.classList.remove('on');m.setAttribute('aria-hidden','true')}
+$('#cert').addEventListener('click',certOpen);
+$('#cert-close').onclick=()=>{SFX.tap();certClose()};
+$('#cert-modal').addEventListener('click',e=>{if(e.target.id==='cert-modal')certClose()});
+$('#cert-pdf').onclick=async()=>{SFX.tap();const cv=await certCanvas();const url=cv.toDataURL('image/jpeg',.94);const bin=atob(url.split(',')[1]);const jpg=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)jpg[i]=bin.charCodeAt(i);
+ const blob=kzPdf(jpg,cv.width,cv.height),name='Urkunde_Meisterdetektiv.pdf';
+ try{const f=new File([blob],name,{type:'application/pdf'});if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)){await navigator.share({files:[f],title:'Urkunde Meisterdetektiv'});return}}catch(e){if(e&&e.name==='AbortError')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);toast('Urkunde als PDF gespeichert')};
+
 })();
