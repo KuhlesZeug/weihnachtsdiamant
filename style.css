@@ -420,3 +420,16 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .icon .kimg-hd{width:30px;height:30px}
 .chess img.piece{width:92%;height:92%;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
 .gc-gem .gem-img{width:64px;height:64px;filter:drop-shadow(0 0 10px #d8f1ff)}.gc-roll .gem-img{width:56px;height:56px}
+
+/* Startseite: Diamant */
+.start-gem{position:relative;width:clamp(84px,26vw,118px);aspect-ratio:1;margin:6px auto 4px}
+.start-gem::before{content:"";position:absolute;inset:-35%;background:radial-gradient(circle,rgba(150,200,255,.38) 0,rgba(150,200,255,.12) 38%,transparent 68%);animation:gemglow 4s ease-in-out infinite}
+.start-gem img{position:relative;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 22px rgba(120,180,255,.45));animation:gemfloat 5s ease-in-out infinite}
+.start-gem i{position:absolute;width:14px;height:14px;background:radial-gradient(circle,#fff 0,rgba(255,255,255,.0) 60%);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);opacity:0;animation:gemspark 3.6s ease-in-out infinite}
+.start-gem i:nth-of-type(1){left:22%;top:30%}
+.start-gem i:nth-of-type(2){left:66%;top:22%;animation-delay:1.2s;width:10px;height:10px}
+.start-gem i:nth-of-type(3){left:52%;top:62%;animation-delay:2.4s}
+@keyframes gemfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes gemglow{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes gemspark{0%,70%,100%{opacity:0;transform:scale(.4)}82%{opacity:1;transform:scale(1.2)}}
+@media (max-height:680px){.start-gem{width:72px}}
