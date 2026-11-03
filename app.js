@@ -372,6 +372,6 @@ $('#cert-pdf').onclick=async()=>{SFX.tap();const cv=await certCanvas();const url
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);toast('Urkunde als PDF gespeichert')};
 
 /* Icons einsetzen */
-(function(){try{$('#btn-akte').innerHTML=KI.akte;$('#btn-sound').innerHTML=st.sound===false?KI.mute:KI.sound;$('#btn-say').innerHTML=KI.say;const h=document.getElementById('handicon');if(h)h.innerHTML=KI.handSvg;$('#gcgem').innerHTML=KI.diamond;$('#gcroll').innerHTML=KI.diamond.replace(/gmA/g,'gmC').replace(/gmB/g,'gmD')}catch(e){console.error(e)}})();
+(function(){try{$('#btn-akte').innerHTML=KI.akte;$('#btn-sound').innerHTML=st.sound===false?KI.mute:KI.sound;$('#btn-say').innerHTML=KI.say;const h=document.getElementById('handicon');if(h)h.innerHTML=KI.handSvg;$('#gcgem').innerHTML=KI.diamond;$('#gcroll').innerHTML=KI.diamond}catch(e){console.error(e)}})();
 window.KDEBUG={openCase,openEnv,st,save,renderDesk,show};
 })();

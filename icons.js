@@ -43,3 +43,9 @@ window.KI={
  diamond:'<svg class="gem-svg" viewBox="0 0 120 100" aria-hidden="true"><defs><linearGradient id="gmA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#cfefff"/><stop offset="1" stop-color="#6fb4e6"/></linearGradient><linearGradient id="gmB" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9f8ff"/><stop offset="1" stop-color="#4f93c9"/></linearGradient></defs><g stroke="#e8f7ff" stroke-width="1.2" stroke-linejoin="round"><path d="M30 8h60l26 26H4z" fill="url(#gmA)"/><path d="M4 34h112L60 96z" fill="url(#gmB)"/><path d="M30 8l12 26 18-26 18 26 12-26M4 34l56 62 56-62M42 34l18 62 18-62" fill="none" opacity=".85"/></g><path d="M38 14l8 14" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/><circle cx="92" cy="24" r="2.4" fill="#fff"/></svg>'
 };
 })();
+
+// gemalte Bildicons (Higgsfield), ersetzen die gezeichneten Motive
+(function(){const I=(n,c)=>'<img class="kimg'+(c?' '+c:'')+'" src="a/ic/'+n+'.webp" alt="" draggable="false">';
+ Object.assign(window.KI,{hat:I('hat'),basket:I('basket'),key:I('key'),gear:I('gear'),teapot:I('teapot'),anchor:I('anchor'),violin:I('violin'),pot:I('pot'),candle:I('candle'),mirror:I('mirror','kimg-sm'),
+  chess:function(kind,white){return I((white?'w':'b')+kind,'piece')},
+  diamond:I('diamond','gem-img')});})();

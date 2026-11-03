@@ -112,7 +112,7 @@ h1 em{color:var(--gold);font-style:italic}
 .clockctl .btn{padding:6px 14px}
 .coachgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:280px;margin:0 auto}
 .coachgrid div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#fffaf0;border:1px solid rgba(42,29,20,.25);font-family:'Special Elite';font-size:20px;border-radius:4px;position:relative}
-.coachgrid .car::after{content:"";position:absolute;inset:12%;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M7.5%2021v-4.2c-1.3-.7-2.2-2.1-2.2-3.9%200-2.6%201.6-4.4%203.3-5.6L7.9%204.6l2.4%201.6c.6-.2%201.3-.3%202-.3%201.2%200%202.3.4%203.2%201.1l3.4%203.2c.6.6.7%201.5.1%202.1l-.5.5c-.5.5-1.3.6-1.9.2l-1.9-1.3-.3%202.4c-.2%201.5.4%203%201.6%203.9V21z%22%20fill%3D%22%235a3418%22/%3E%3Cpath%20d%3D%22M8.6%207.6c1-.8%201.4-1.9%201.2-3%22%20fill%3D%22none%22%20stroke%3D%22%232a1d14%22%20stroke-width%3D%22.9%22/%3E%3Ccircle%20cx%3D%2214.3%22%20cy%3D%228.4%22%20r%3D%22.7%22%20fill%3D%22%23fffaf0%22/%3E%3C/svg%3E") center/contain no-repeat}
+.coachgrid .car::after{content:"";position:absolute;inset:6%;background:url(a/ic/horse.webp) center/contain no-repeat}
 .arrows{display:grid;grid-template-columns:repeat(3,52px);gap:6px;justify-content:center;margin-top:10px}
 .arrows button{height:46px;border-radius:8px;border:2px solid var(--ink);background:#fffaf0;font-size:20px}
 .mirror-wrap{perspective:600px}
@@ -411,3 +411,12 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .gc-gem .gem-svg{width:62px;height:52px;display:block}.gc-roll .gem-svg{width:52px;height:44px;display:block}
 .say.on{color:#fff4e0}
 .roomic{display:flex;justify-content:center;margin-top:8px}.roomic .ki{width:38px;height:38px;color:var(--ink);margin:0}
+
+/* gemalte Bildicons */
+.kimg{width:1.4em;height:1.4em;object-fit:contain;display:inline-block;vertical-align:middle;-webkit-user-drag:none;user-select:none}
+.suspects .ic .kimg,.scard .ic .kimg{width:46px;height:46px}
+.roomic .kimg{width:64px;height:64px}
+.btn .kimg-sm{width:22px;height:22px;margin-right:6px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+.icon .kimg-hd{width:30px;height:30px}
+.chess img.piece{width:92%;height:92%;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.gc-gem .gem-img{width:64px;height:64px;filter:drop-shadow(0 0 10px #d8f1ff)}.gc-roll .gem-img{width:56px;height:56px}
