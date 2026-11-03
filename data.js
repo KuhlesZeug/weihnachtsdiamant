@@ -2,12 +2,12 @@
 // Jede Lösung ergibt einen Buchstaben. Zusammen: DER DIAMANT LIEGT IM UHRWERK
 window.RING = ['S','A','K','N','O','B','L','H','D','E','T','M']; // Buchstabenring der Taschenuhr, Position 0 = XII
 window.SUSPECTS = [
-  {n:'Edmund Ashcombe', r:'Neffe der Lady, in Geldnot', i:'🎩'},
-  {n:'Mary Finch', r:'Kammerzofe, kennt jeden Schrank', i:'🧺'},
-  {n:'Mr. Hobbs', r:'Butler, hat alle Schlüssel', i:'🗝️'},
-  {n:'Silas Tolliver', r:'Uhrmacher aus Clerkenwell', i:'⚙️'},
-  {n:'Mrs. Crane', r:'Köchin, früh auf den Beinen', i:'🫖'},
-  {n:'Captain Rowe', r:'Gast, Kapitän im Ruhestand', i:'⚓'}
+  {n:'Edmund Ashcombe', r:'Neffe der Lady, in Geldnot', i:KI.hat},
+  {n:'Mary Finch', r:'Kammerzofe, kennt jeden Schrank', i:KI.basket},
+  {n:'Mr. Hobbs', r:'Butler, hat alle Schlüssel', i:KI.key},
+  {n:'Silas Tolliver', r:'Uhrmacher aus Clerkenwell', i:KI.gear},
+  {n:'Mrs. Crane', r:'Köchin, früh auf den Beinen', i:KI.teapot},
+  {n:'Captain Rowe', r:'Gast, Kapitän im Ruhestand', i:KI.anchor}
 ];
 window.DAYS = [
  {t:'Die Zeitungsnotiz', s:'Aus dem Stadthaus von Lady Ashcombe ist der Weihnachtsdiamant verschwunden. In der Morgenzeitung steht eine merkwürdige Notiz. Der Verfasser hat eine Botschaft versteckt.',
@@ -61,7 +61,7 @@ window.DAYS = [
   w:{k:'plan', rooms:[['Halle','P'],['Treppenhaus','O'],['Salon','S'],['Küche','A'],['Vorratskammer','E'],['Uhrenkammer','I']]}, q:'Start in der Halle. Geh einen Raum nach rechts, noch einen nach rechts und dann einen nach unten. Tipp auf den Raum.', a:['Uhrenkammer'], L:'I', how:'In der Uhrenkammer steht ein I',
   h:['Rechts neben der Halle liegt das Treppenhaus.','Du landest unten rechts.']},
  {t:'Wer war wo?', s:'Um halb zehn war jeder in einem anderen Raum. Edmund, Mary und Mr. Hobbs verteilten sich auf Musikzimmer, Küche und Keller. 1. Mary war in der Küche. 2. Mr. Hobbs war nicht im Musikzimmer.',
-  w:{k:'choice', cols:3, opts:[['Musikzimmer','🎻 Musikzimmer'],['Küche','🍲 Küche'],['Keller','🕯️ Keller']]}, q:'Wo war Edmund?', a:['Musikzimmer'], L:'M', how:'Edmund war im Musikzimmer, er ist entlastet',
+  w:{k:'choice', cols:3, opts:[['Musikzimmer','<span class="roomic">'+KI.violin+'</span>'],['Küche','<span class="roomic">'+KI.pot+'</span>'],['Keller','<span class="roomic">'+KI.candle+'</span>']]}, q:'Wo war Edmund?', a:['Musikzimmer'], L:'M', how:'Edmund war im Musikzimmer, er ist entlastet',
   h:['Die Küche ist schon besetzt.','Mr. Hobbs war im Keller.']},
  {t:'Das Notizbuch', s:'Im Notizbuch des Inspektors stehen die wichtigen Wörter des Falls. Sie verstecken sich waagerecht und senkrecht im Gitter. Ein Wort aus der Liste fehlt.',
   w:{k:'search', grid:['DBKWTOVV','PKUTSCHE','NLILLUPE','ALIBIDNZ','WOVNDFZT','ITEEOGWT','NEBELBDO','OPWVDDMW'], words:['NEBEL','LUPE','KUTSCHE','ALIBI','TEE','UHR']}, q:'Markiere die Wörter, indem du ihren ersten und letzten Buchstaben antippst. Welches Wort fehlt?', a:['UHR'], L:'U', how:'Das fehlende Wort ist UHR',

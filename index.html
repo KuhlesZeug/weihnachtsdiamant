@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Special+Elite&family=Lora:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <canvas id="snow"></canvas>
@@ -46,8 +46,8 @@
       <div class="title">Der Weihnachtsdiamant</div>
     </div>
     <div class="headbtns">
-      <button id="btn-akte" class="icon" title="Akte">📁</button>
-      <button id="btn-sound" class="icon" title="Ton">🔊</button>
+      <button id="btn-akte" class="icon" title="Akte" aria-label="Akte"></button>
+      <button id="btn-sound" class="icon" title="Ton" aria-label="Ton"></button>
     </div>
   </header>
   <div class="report" id="report"></div>
@@ -87,7 +87,7 @@
           <g id="sealR"><image href="a/siegel.svg" x="-32" y="-32" width="64" height="64" clip-path="url(#clR)"/></g>
           <text id="sealtxt"></text>
         </g>
-        <g id="hand" class="hand"><circle r="26" fill="rgba(216,180,106,.25)" stroke="#d8b46a" stroke-width="2"/><text y="9" text-anchor="middle" font-size="26">👆</text></g>
+        <g id="hand" class="hand"><circle r="26" fill="rgba(216,180,106,.25)" stroke="#d8b46a" stroke-width="2"/><g id="handicon" transform="translate(1 2) scale(.95)"></g></g>
       </svg>
     </div>
     <p class="env-hint" id="env-hint">Greif das Schleifenband und zieh die Schleife auf</p>
@@ -101,7 +101,7 @@
     <div class="paper">
       <div class="case-top"><span id="c-date"></span><span class="nr" id="c-nr"></span></div>
       <div class="dept">London · Abteilung für besondere Fälle</div>
-      <div class="titlerow"><h2 id="c-title"></h2><button class="say" id="btn-say" title="Vorlesen">🔈</button></div>
+      <div class="titlerow"><h2 id="c-title"></h2><button class="say" id="btn-say" title="Vorlesen" aria-label="Vorlesen"></button></div>
       <p class="story" id="c-story"></p>
       <div class="widget" id="c-widget"></div>
       <p class="question" id="c-q"></p>
@@ -157,12 +157,12 @@
           <div class="gc-cavity">
             <div class="gc-glow"></div>
             <div class="gc-pend"><div class="gc-rod"></div><div class="gc-bob"></div></div>
-            <div class="gc-gem">💎</div>
+            <div class="gc-gem" id="gcgem"></div>
           </div>
           <div class="gc-door"><div class="gc-glass"></div><div class="gc-knob"></div></div>
         </div>
         <div class="gc-base"></div>
-        <div class="gc-roll">💎</div>
+        <div class="gc-roll" id="gcroll"></div>
       </div>
       <div class="gc-progwrap"><div class="gc-prog"></div></div>
       <button class="btn sm" id="clock-btn" style="display:none"></button>
@@ -215,9 +215,10 @@
     <p class="cm-note">Das PDF ist im A4 Querformat und lässt sich direkt ausdrucken.</p>
   </div>
 </div>
-<script src="gate.js"></script>
-<script src="data.js"></script>
-<script src="stimmen.js"></script>
-<script src="app.js"></script>
+<script src="gate.js?v=2"></script>
+<script src="icons.js?v=2"></script>
+<script src="data.js?v=2"></script>
+<script src="stimmen.js?v=2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
