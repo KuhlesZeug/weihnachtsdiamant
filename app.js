@@ -230,9 +230,13 @@ const WIDGETS={
   ctx.noInput=true;ctx.W.append(g,built)},
  seals(ctx){const mk=n=>{const s=svgEl('svg',{viewBox:'-40 -40 80 80',width:90});s.appendChild(svgEl('circle',{r:36,fill:'#8f1c20'}));s.appendChild(svgEl('circle',{r:26,fill:'none',stroke:'#c8585c','stroke-width':2}));const t=svgEl('path',{d:'M0 -11 L3.2 -3.6 L11 -3.4 L5 1.7 L6.9 9.4 L0 5.2 L-6.9 9.4 L-5 1.7 L-11 -3.4 L-3.2 -3.6Z',fill:'#f2c2b0'});s.appendChild(t);for(let i=0;i<n;i++){const a=i*2*Math.PI/5-Math.PI/2;s.appendChild(svgEl('circle',{cx:Math.cos(a)*31,cy:Math.sin(a)*31,r:3,fill:'#f2c2b0'}))}return s};
   const g=el('div','seals');[['O',5],['W',4],['F',5],['H',5]].forEach(([L,n])=>{const b=el('button');b.append(mk(n),el('span','',L));b.onclick=()=>{SFX.seal();g.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');ctx.check(L)};g.appendChild(b)});ctx.noInput=true;ctx.W.appendChild(g)},
- anagram(ctx){const w=ctx.D.w,box=el('div','letters'),built=el('div','built','');let cur='';
-  w.letters.split('').forEach(L=>{const b=el('button','',L);b.onclick=()=>{if(b.classList.contains('used'))return;SFX.key();b.classList.add('used');cur+=L;built.textContent=cur+(cur.length===w.letters.length?w.suffix:'');if(cur.length===w.letters.length){setTimeout(()=>{ctx.check(cur);if(cur!=='EUSTON'){cur='';built.textContent='';box.querySelectorAll('button').forEach(x=>x.classList.remove('used'))}},500)}};box.appendChild(b)});
-  ctx.noInput=true;ctx.W.append(box,built)},
+ anagram(ctx){const w=ctx.D.w,n=w.letters.length,box=el('div','letters'),built=el('div','built','');let cur='';
+  const map=el('div','stadtplan','<div class="sp-k">Stadtplan · Bahnhöfe im Norden</div><div class="sp-l"><span>Marylebone</span><span>Euston</span><span>King\'s Cross</span><span>St Pancras</span></div>');
+  const show=()=>{built.textContent=cur+'_'.repeat(n-cur.length)+w.suffix};
+  const reset=()=>{cur='';show();box.querySelectorAll('button').forEach(x=>x.classList.remove('used'))};
+  w.letters.split('').forEach(L=>{const b=el('button','',L);b.onclick=()=>{if(b.classList.contains('used'))return;SFX.key();b.classList.add('used');cur+=L;show();if(cur.length===n){setTimeout(()=>{ctx.check(cur);if(cur!=='EUSTON')reset()},500)}};box.appendChild(b)});
+  const rb=el('button','btn ghost sm','Neu legen');rb.style.color='#2a1d14';rb.style.margin='4px auto 0';rb.style.display='block';rb.onclick=()=>{SFX.tap();reset()};
+  show();ctx.noInput=true;ctx.W.append(map,box,built,rb)},
  notes(ctx){const w=ctx.D.w;const F={C:262,D:294,E:330,F:349,G:392,A:440,H:494,c:523};const Y={C:110,D:105,E:100,F:95,G:90,A:85,H:80,c:75};
   const s=svgEl('svg',{viewBox:'0 40 320 90',class:'staff'});for(let i=0;i<5;i++)s.appendChild(svgEl('line',{x1:10,x2:310,y1:80+i*10-0,y2:80+i*10,stroke:'#3b2a1e'}));
   const clef=svgEl('text',{x:14,y:112,'font-size':52,fill:'#3b2a1e'});clef.textContent='𝄞';s.appendChild(clef);

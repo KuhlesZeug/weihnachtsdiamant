@@ -433,3 +433,7 @@ input[type=range]{width:100%;accent-color:var(--red)}
 @keyframes gemglow{0%,100%{opacity:.75}50%{opacity:1}}
 @keyframes gemspark{0%,70%,100%{opacity:0;transform:scale(.4)}82%{opacity:1;transform:scale(1.2)}}
 @media (max-height:680px){.start-gem{width:72px}}
+
+.stadtplan{border:2px dashed var(--ink);border-radius:6px;padding:8px 10px;margin:0 0 12px;background:rgba(255,250,240,.6);text-align:center}
+.stadtplan .sp-k{font:700 12px 'Special Elite';letter-spacing:1px;text-transform:uppercase;opacity:.75;margin-bottom:6px}
+.stadtplan .sp-l{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:16px 'Special Elite'}
