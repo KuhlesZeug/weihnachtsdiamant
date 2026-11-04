@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Special+Elite&family=Lora:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 <canvas id="snow"></canvas>
@@ -52,7 +52,8 @@
       <button id="btn-sound" class="icon" title="Ton" aria-label="Ton"></button>
     </div>
   </header>
-  <div class="report" id="report"></div>
+  <div class="door" id="door"><img src="a/tuer.jpg" alt=""><div class="slotgap"></div><div class="slotflap" id="slotflap"></div><div class="doorshade"></div></div>
+  <div class="report rep2" id="report"></div>
   <div class="grid" id="grid"></div>
   <p class="foot" id="deskfoot"></p>
 </section>
@@ -64,23 +65,23 @@
     <div class="envelope" id="envelope">
       <div class="env-back"></div>
       <div class="env-card" id="env-card"><div class="mini-stamp">Beweisstück</div></div>
-      <div class="env-front"></div>
+      <div class="env-front"></div><div class="env-stamp"></div><div class="env-post">LONDON<br>DEZ<br>1891</div><div class="env-addr" id="env-addr">An den Ermittler<small>Abteilung für besondere Fälle</small></div>
       <div class="env-flap" id="env-flap"></div>
       <svg id="rib" class="rib" viewBox="0 0 400 300">
         <defs>
-          <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2474d"/><stop offset=".5" stop-color="#a8161d"/><stop offset="1" stop-color="#6e0f13"/></linearGradient>
+          <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2474d"/><stop offset=".5" stop-color="#a8161d"/><stop offset="1" stop-color="#6e0f13"/></linearGradient><linearGradient id="rgv" gradientUnits="userSpaceOnUse" x1="187" y1="0" x2="213" y2="0"><stop offset="0" stop-color="#7d1016"/><stop offset=".12" stop-color="#c3232b"/><stop offset=".3" stop-color="#d8353d"/><stop offset=".46" stop-color="#ef6a70"/><stop offset=".54" stop-color="#d8353d"/><stop offset=".85" stop-color="#b51d25"/><stop offset="1" stop-color="#6e0e13"/></linearGradient><linearGradient id="rgh" gradientUnits="userSpaceOnUse" x1="0" y1="137" x2="0" y2="163"><stop offset="0" stop-color="#7d1016"/><stop offset=".12" stop-color="#c3232b"/><stop offset=".3" stop-color="#d8353d"/><stop offset=".46" stop-color="#ef6a70"/><stop offset=".54" stop-color="#d8353d"/><stop offset=".85" stop-color="#b51d25"/><stop offset="1" stop-color="#6e0e13"/></linearGradient><linearGradient id="rgt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d1016"/><stop offset=".12" stop-color="#c3232b"/><stop offset=".3" stop-color="#d8353d"/><stop offset=".46" stop-color="#ef6a70"/><stop offset=".54" stop-color="#d8353d"/><stop offset=".85" stop-color="#b51d25"/><stop offset="1" stop-color="#6e0e13"/></linearGradient><radialGradient id="rgl" cx=".5" cy=".75" r=".9"><stop offset="0" stop-color="#7a0f14"/><stop offset=".45" stop-color="#c3242c"/><stop offset=".8" stop-color="#e8545b"/><stop offset="1" stop-color="#a0161d"/></radialGradient>
           <radialGradient id="wax" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#d4454a"/><stop offset="1" stop-color="#6e1014"/></radialGradient>
           <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".45"/></filter>
         </defs>
         <g id="bands" filter="url(#sh)">
-          <path id="bv1" class="band"/><path id="bv2" class="band"/><path id="bh1" class="band"/><path id="bh2" class="band"/>
+          <path id="ev1" class="bandedge"/><path id="ev2" class="bandedge"/><path id="eh1" class="bandedge"/><path id="eh2" class="bandedge"/><path id="bv1" class="band"/><path id="bv2" class="band"/><path id="bh1" class="band bh"/><path id="bh2" class="band bh"/><path id="gv1" class="groove"/><path id="gv2" class="groove"/><path id="gh1" class="groove"/><path id="gh2" class="groove"/>
           <path id="sv1" class="sheen"/><path id="sv2" class="sheen"/><path id="sh1" class="sheen"/><path id="sh2" class="sheen"/>
         </g>
         <g id="bowg" filter="url(#sh)">
-          <path id="tailL" class="tail"/><path id="tailR" class="tail"/>
+          <path id="teL" class="tailedge"/><path id="teR" class="tailedge"/><path id="tailL" class="tail"/><path id="tailR" class="tail"/><path id="tnL" fill="#4a080b"/><path id="tnR" fill="#4a080b"/>
           <g id="loops"><path class="loop" d="M0 0 C -30 -58 -92 -40 -64 -6 C -50 10 -20 6 0 0Z"/><path class="loop" d="M0 0 C 30 -58 92 -40 64 -6 C 50 10 20 6 0 0Z"/>
-          <path class="loopin" d="M-6 -4 C -26 -34 -62 -30 -50 -10"/><path class="loopin" d="M6 -4 C 26 -34 62 -30 50 -10"/></g>
-          <ellipse id="knot" rx="13" ry="11" fill="url(#rg)" stroke="#5e0c10" stroke-width="1.5"/>
+          <path class="loopin" d="M-6 -4 C -26 -34 -62 -30 -50 -10"/><path class="loopin" d="M6 -4 C 26 -34 62 -30 50 -10"/><path class="loopfold" d="M-14 -10 C -30 -40 -70 -40 -76 -20"/><path class="loopfold" d="M14 -10 C 30 -40 70 -40 76 -20"/><path class="loopfold" d="M-20 -2 C -38 -14 -58 -12 -66 -4" style="stroke:rgba(70,5,8,.45)"/><path class="loopfold" d="M20 -2 C 38 -14 58 -12 66 -4" style="stroke:rgba(70,5,8,.45)"/></g>
+          <ellipse id="knot" rx="15" ry="12" fill="url(#rgl)" stroke="#4a080b" stroke-width="1.6"/><path d="M-9 -6 C -4 -2 -4 4 -9 8 M9 -6 C 4 -2 4 4 9 8" fill="none" stroke="rgba(60,4,8,.55)" stroke-width="1.4"/><path d="M-6 -8 C 0 -10 6 -8 8 -6" fill="none" stroke="rgba(255,210,200,.6)" stroke-width="1.4"/>
         </g>
         <g id="sealg" transform="translate(200 150)">
           <clipPath id="clL"><path d="M-40 -40 L2 -40 L6 -12 L-3 1 L5 12 L0 40 L-40 40Z"/></clipPath>
@@ -220,10 +221,10 @@
     <p class="cm-note">Das PDF ist im A4 Querformat und lässt sich direkt ausdrucken.</p>
   </div>
 </div>
-<script src="gate.js?v=9"></script>
-<script src="icons.js?v=9"></script>
-<script src="data.js?v=9"></script>
-<script src="stimmen.js?v=9"></script>
-<script src="app.js?v=9"></script>
+<script src="gate.js?v=10"></script>
+<script src="icons.js?v=10"></script>
+<script src="data.js?v=10"></script>
+<script src="stimmen.js?v=10"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>

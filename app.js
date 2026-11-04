@@ -7,6 +7,7 @@ const KEY='kz_krimi_v1';
 if(params.get('reset')==='1'&&params.get('probe')){try{localStorage.removeItem(KEY)}catch(e){}history.replaceState(null,'',location.pathname+location.search.replace(/[?&]reset=1/,'').replace(/^&/,'?'))}
 let st={done:{},open:{},sound:true};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)st=Object.assign(st,s)}catch(e){}
+if(st.sound===false&&!st.soundSet)st.sound=true;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 
 /* ---------- Geschenk ---------- */
@@ -69,6 +70,14 @@ function startAmb(){if(ambOn)return;ambOn=true;const c=ac();
  const s=c.createBufferSource();s.buffer=b;s.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=320;const g=c.createGain();g.gain.value=.12;s.connect(f);f.connect(g);g.connect(master);s.start();amb=g;
  ambTimer=setInterval(()=>{if(Math.random()<.5)noise(.02+Math.random()*.03,2000+Math.random()*3000,2,.04+Math.random()*.05);SFX.tick()},1000)}
 const music=$('#music');music.volume=.07;
+/* iOS und Android: Ton auch bei Stummschalter, ohne extra Antippen */
+try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+let kzSil=null;function kzUnlock(){try{ac()}catch(e){}if(!kzSil){try{kzSil=new Audio('data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA');kzSil.loop=true;kzSil.setAttribute('x-webkit-airplay','deny');kzSil.play().catch(()=>{kzSil=null})}catch(e){kzSil=null}}}
+['touchstart','touchend','pointerdown','click','keydown'].forEach(ev=>document.addEventListener(ev,kzUnlock,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AC&&AC.state!=='running')AC.resume()});
+const MOUSE=['a/v/maus1.mp3','a/v/maus2.mp3'].map(x=>{const m=new Audio(x);m.preload='auto';return m});const KV=new Audio('a/v/k1.mp3');KV.preload='auto';
+document.addEventListener('pointerdown',()=>{if(st.sound&&$('#s-desk').classList.contains('on')&&music.paused){music.muted=false;music.play().catch(()=>{})}},{capture:true,passive:true});
+
 const voice=new Audio('a/stimmen.mp3');voice.preload='auto';let vStop=null;
 function vDone(){clearTimeout(vStop);try{voice.pause()}catch(e){}try{for(const k in vf)if(vf[k]&&vf[k].pause)vf[k].pause()}catch(e){}music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on')}
 const VOXF={spuren:'a/spuren.mp3',cert:'a/urkunde.mp3'};const vf={};
@@ -87,43 +96,58 @@ function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.re
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2600)}
 
 /* ---------- Start und Intro ---------- */
-$('#btn-start').onclick=()=>{ac();if(st.act)beginIntro();else access().then(ok=>ok&&beginIntro())};
+$('#btn-start').onclick=()=>{ac();try{music.muted=true;music.play().catch(()=>{});voice.muted=true;voice.play().then(()=>{voice.pause();voice.muted=false}).catch(()=>{voice.muted=false})}catch(e){}if(st.act)beginIntro();else access().then(ok=>ok&&beginIntro())};
 function beginIntro(){SFX.paper();show('#s-intro');const v=$('#intro');v.currentTime=0;v.muted=!st.sound;v.play().catch(()=>{v.muted=true;v.play().catch(goDesk)});
  const lines=[[0.9,'London, Dezember 1891.'],[4.9,'Dichter Nebel liegt über der Stadt.'],[7.5,'Der Weihnachtsdiamant ist verschwunden.'],[12.3,'Sechs Verdächtige.'],[13.8,'24 Beweisstücke.'],[16.2,'Und ich brauche deine Hilfe, Ermittler.'],[19.6,'']];
  const it=$('#intro-text');v.ontimeupdate=()=>{let txt='';lines.forEach(l=>{if(v.currentTime>=l[0])txt=l[1]});if(it.textContent!==txt)it.textContent=txt};
  v.onended=goDesk}
 $('#btn-skip').onclick=goDesk;
-function goDesk(){const v=$('#intro');v.pause();renderDesk();show('#s-desk');if(st.sound){music.play().catch(()=>{})}startAmb()}
-$('#btn-sound').onclick=()=>{ac();setSound(!st.sound);if(st.sound)music.play().catch(()=>{})};
+function goDesk(){const v=$('#intro');v.pause();renderDesk();show('#s-desk');music.muted=!st.sound;if(st.sound){music.play().catch(()=>{})}startAmb()}
+$('#btn-sound').onclick=()=>{ac();st.soundSet=1;setSound(!st.sound);if(st.sound)music.play().catch(()=>{})};
 setSound(st.sound);
 $('#btn-akte').onclick=()=>{SFX.paper();renderAkte();show('#s-akte')};
 $('#btn-akte-back').onclick=()=>{SFX.paper();show('#s-desk')};
 
 /* ---------- Schreibtisch ---------- */
 const PERM=[17,3,22,9,14,1,20,6,11,24,4,16,8,19,2,13,23,7,10,21,5,15,18,12];
-function renderReport(box,big){box.innerHTML='';let i=0;const wr=el('div','words');WORDS.forEach(w=>{const g=el('div','word');for(let k=0;k<w;k++){const s=el('div','slot','');s.dataset.i=i;g.appendChild(s);i++}wr.appendChild(g)});box.appendChild(wr);
- if(big)return;const n=Object.keys(st.done).length;const lab=el('div','poollab',n?'Deine Spurensammlung · '+n+' von 24':'Deine Spurensammlung · noch leer');box.appendChild(lab);
- const pool=el('div','pool');PERM.forEach(d=>{if(st.done[d]){const t=el('span','tile',SOL[d-1]);t.dataset.d=d;pool.appendChild(t)}});box.appendChild(pool)}
+function renderReport(box,big){box.innerHTML='';
+ if(!big){const n=Object.keys(st.done).length;
+  box.appendChild(el('div','rep-head','<i class="pin"></i><span>Ermittlungsbericht</span><i class="pin"></i>'));
+  const ln=el('div','rep-line','<em>Das Versteck des Diamanten:</em>');const wr=el('div','rep-words');WORDS.forEach(w=>{const g=el('span','rep-w');for(let k=0;k<w;k++)g.appendChild(el('i'));wr.appendChild(g)});ln.appendChild(wr);box.appendChild(ln);
+  const kb=el('div','keyboard');for(let r=0;r<3;r++){const row=el('div','krow');PERM.slice(r*8,r*8+8).forEach(d=>{const k=el('span','tkey'+(st.done[d]?' on':''),st.done[d]?'<b>'+SOL[d-1]+'</b>':'');k.dataset.d=d;row.appendChild(k)});kb.appendChild(row)}box.appendChild(kb);
+  box.appendChild(el('div','poollab',n?'Gesammelte Spuren · '+n+' von 24':'Gesammelte Spuren · noch keine'));return}
+ let i=0;const wr=el('div','words');WORDS.forEach(w=>{const g=el('div','word');for(let k=0;k<w;k++){const s=el('div','slot','');s.dataset.i=i;g.appendChild(s);i++}wr.appendChild(g)});box.appendChild(wr)}
 function kCount(){const n=Object.keys(st.mice||{}).length;const e=$('#kcount');if(e)e.querySelector('span').textContent='Krümel gefunden: '+n+' von 24'}
 function renderDesk(){kCount();renderReport($('#report'));const g=$('#grid');g.innerHTML='';const td=todayNr();
  for(let d=1;d<=24;d++){const b=el('button','env');b.style.setProperty('--r',((d*37)%7-3)*.6+'deg');b.style.setProperty('--i',d);const u=unlocked(d);
   if(st.done[d])b.classList.add('open');else if(!u)b.classList.add('locked');if(d===td&&!st.done[d])b.classList.add('today');
   b.appendChild(el('span','num',d));b.appendChild(el('span','wax'+(st.done[d]?'':' seal'),st.done[d]?'<b class="solvedmark">'+KI.check+'</b>':'<img src="a/siegel.svg" alt="">'+(u?'':'<i>'+KI.lock+'</i>')));
   b.onclick=()=>{if(!unlocked(d)){SFX.no();toast('Dieser Umschlag ist bis zum '+d+'. Dezember versiegelt.');return}SFX.tap();if(st.done[d]||st.open[d])openCase(d);else openEnv(d)};g.appendChild(b)}
- const n=Object.keys(st.done).length;$('#deskfoot').textContent=n===24?'Alle Beweisstücke gelöst. Öffne Umschlag 24 für das Finale.':n+' von 24 Beweisstücken gelöst. Jeden Tag im Dezember öffnet sich ein neuer Umschlag.'}
+ mailDrop(td);const n=Object.keys(st.done).length;$('#deskfoot').textContent=n===24?'Alle Beweisstücke gelöst. Öffne Umschlag 24 für das Finale.':n+' von 24 Beweisstücken gelöst. Jeden Tag im Dezember öffnet sich ein neuer Umschlag.'}
 
+
+/* ---------- Briefschlitz: Umschläge flutschen herein ---------- */
+let dropDone=false,dropAt=0,mdT=null;
+function mailDrop(td){const door=$('#door'),flap=$('#slotflap');if(!door||!flap)return;
+ clearTimeout(mdT);mdT=setTimeout(()=>{if(!$('#s-desk').classList.contains('on'))return;const envs=[...document.querySelectorAll('#grid .env')];const fr=flap.getBoundingClientRect();const sx=fr.left+fr.width/2,sy=fr.top+fr.height*.9;
+  const fresh=!dropDone||performance.now()-dropAt<2500;let list=fresh?envs:envs.filter((e,i)=>i+1===td&&!st.done[td]&&!st.open[td]);if(!dropDone){dropDone=true;dropAt=performance.now()}if(!list.length)return;
+  flap.classList.add('open');if(st.sound)setTimeout(()=>SFX.paper(),80);
+  list.forEach((e,i)=>{const r=e.getBoundingClientRect();const dx=sx-(r.left+r.width/2),dy=sy-(r.top+r.height/2);const rot=parseFloat(getComputedStyle(e).getPropertyValue('--r'))||0;e.style.animation='none';
+   e.animate([{transform:`translate(${dx}px,${dy}px) scale(.42,.18) rotate(0deg)`,opacity:0,offset:0},{transform:`translate(${dx}px,${dy+14}px) scale(.5,.5) rotate(${rot*3}deg)`,opacity:1,offset:.18},{transform:`translate(${dx*.4}px,${dy*.55}px) scale(.9) rotate(${-rot*4}deg)`,opacity:1,offset:.55},{transform:`rotate(${rot}deg)`,opacity:1,offset:1}],{duration:list.length>1?760:1100,delay:(list.length>1?i*45:150),easing:'cubic-bezier(.35,.9,.4,1.05)',fill:'backwards'})});
+  setTimeout(()=>flap.classList.remove('open'),(list.length>1?list.length*45:150)+700)},140)}
 /* ---------- Umschlag mit Schleife ---------- */
 let curDay=0;
 const RB={C:[200,150],k:[200,150],p:null,t:0,free:false};
 function rbDraw(){const [cx,cy]=RB.C,[kx,ky]=RB.k,set=(id,d)=>document.getElementById(id).setAttribute('d',d);
  const v1=`M200 -14 Q${(200+kx)/2} ${ky*0.45} ${kx} ${ky}`,v2=`M${kx} ${ky} Q${(200+kx)/2} ${ky+(314-ky)*0.55} 200 314`,h1=`M-14 150 Q${kx*0.45} ${(150+ky)/2} ${kx} ${ky}`,h2=`M${kx} ${ky} Q${kx+(414-kx)*0.55} ${(150+ky)/2} 414 150`;
- set('bv1',v1);set('bv2',v2);set('bh1',h1);set('bh2',h2);set('sv1',v1);set('sv2',v2);set('sh1',h1);set('sh2',h2);
+ set('bv1',v1);set('bv2',v2);set('bh1',h1);set('bh2',h2);set('sv1',v1);set('sv2',v2);set('sh1',h1);set('sh2',h2);set('ev1',v1);set('ev2',v2);set('eh1',h1);set('eh2',h2);set('gv1',v1);set('gv2',v2);set('gh1',h1);set('gh2',h2);
  const t=RB.t,tc=Math.min(1,t),sc=1-0.78*Math.pow(tc,1.8);document.getElementById('loops').setAttribute('transform',`scale(${sc}) rotate(${tc*18})`);
  document.getElementById('bowg').setAttribute('transform',`translate(${kx} ${ky})`);document.getElementById('sealg').setAttribute('transform',`translate(${kx} ${ky})`);
- const p=RB.p||[kx+42,ky+92];const px=p[0]-kx,py=p[1]-ky;set('tailR',`M0 0 Q${px*0.4+10} ${py*0.6+18} ${px} ${py}`);
- set('tailL',`M0 0 Q${-18+t*6} ${36-t*10} ${-36+t*16} ${80-t*30}`)}
+ const p=RB.p||[kx+42,ky+92];const px=p[0]-kx,py=p[1]-ky;const tR=`M0 0 Q${px*0.4+10} ${py*0.6+18} ${px} ${py}`,lx=-36+t*16,ly=80-t*30,tL=`M0 0 Q${-18+t*6} ${36-t*10} ${lx} ${ly}`;set('tailR',tR);set('teR',tR);set('tailL',tL);set('teL',tL);
+ const notch=(x,y,ax,ay)=>{const L=Math.hypot(ax,ay)||1,ux=ax/L,uy=ay/L,nx=-uy*10,ny=ux*10;return `M${x+nx} ${y+ny} L${x+ux*2} ${y+uy*2} L${x-nx} ${y-ny} L${x+ux*12+nx} ${y+uy*12+ny} L${x+ux*12-nx} ${y+uy*12-ny}Z`};
+ set('tnR',`M${px} ${py} m0 0`);set('tnL',`M${lx} ${ly} m0 0`)}
 function openEnv(d){curDay=d;const e=$('#envelope');e.className='envelope';$('#rib').setAttribute('class','rib');RB.k=[200,150];RB.p=null;RB.t=0;RB.free=false;rbDraw();
- $('#env-hint').style.visibility='visible';$('#env-date').textContent=d==='secret'?'Persönlich für '+(gift&&gift.an||'dich'):d+'. Dezember 1891';document.querySelector('#env-card .mini-stamp').textContent=d==='secret'?'Persönlich':'Beweisstück';show('#s-env')}
+ $('#env-hint').style.visibility='visible';$('#env-date').textContent=d==='secret'?'Persönlich für '+(gift&&gift.an||'dich'):d+'. Dezember 1891';document.querySelector('#env-card .mini-stamp').textContent=d==='secret'?'Persönlich':'Beweisstück';$('#env-addr').innerHTML=d==='secret'?'Für '+((gift&&gift.an)||'dich')+'<small>Erst an Heiligabend öffnen</small>':'An den Ermittler'+((gift&&gift.an)?' '+gift.an:'')+'<small>Beweisstück Nr. '+d+'</small>';show('#s-env')}
 (function(){const sv=$('#rib');let drag=false,last=0,lp=null;
  const toV=e=>{const r=sv.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return [(p.clientX-r.left)/r.width*400,(p.clientY-r.top)/r.height*300]};
  const start=e=>{if(RB.free)return;ac();drag=true;sv.classList.add('dragging');move(e);e.preventDefault()};
@@ -167,7 +191,7 @@ function openCase(d){curDay=d;const D=DAYS[d-1];show('#s-case');setTimeout(()=>s
  function showSolved(fresh){const L=D.L;sv.innerHTML='<span class="stamp2">GELÖST</span>Dein Buchstabe:<b>'+L+'</b><br><span style="font-size:14px">'+D.how+'. Er wandert in deine Spurensammlung. Am Heiligabend setzt du alle Spuren zusammen.</span>';sv.style.display='block';
   if(fresh){st.done[d]=1;save();SFX.seal();const fl=el('div','flyletter',L);document.body.appendChild(fl);setTimeout(()=>fl.remove(),1700);setTimeout(SFX.ok,250);if(navigator.vibrate)navigator.vibrate([20,60,20]);setTimeout(()=>sv.scrollIntoView({behavior:'smooth',block:'center'}),400)}
   if(d===24&&Object.keys(st.done).length===24){const fb=el('button','btn','Zum Finale');fb.style.marginTop='12px';fb.onclick=finale;sv.appendChild(el('br'));sv.appendChild(fb)}}}
-$('#btn-case-back').onclick=()=>{hush();SFX.paper();renderDesk();show('#s-desk');setTimeout(()=>{const s=document.querySelector('#report .tile[data-d="'+curDay+'"]');if(s&&st.done[curDay]){s.classList.add('new')}},300)};
+$('#btn-case-back').onclick=()=>{hush();SFX.paper();renderDesk();show('#s-desk');setTimeout(()=>{const s=document.querySelector('#report .tkey[data-d="'+curDay+'"]');if(s&&st.done[curDay]){s.classList.add('new')}},300)};
 
 
 /* ---------- Krümel, die Detektivmaus ---------- */
@@ -178,8 +202,8 @@ function placeMouse(d){const P=$('.paper');P.querySelectorAll('.krumel').forEach
  else if(pose==='m_lantern'){m.style.top='34px';m.style.right='86px';m.style.width='44px';m.style.height='54px'}
  else if(pose==='m_sleep'){m.style.bottom='10px';m.style.right='12px';m.style.width='62px';m.style.height='44px'}
  else{m.style.bottom='12px';m.style.right='12px';m.style.width='48px';m.style.height='58px';if(d%2)m.style.transform='scaleX(-1)'}
- m.onclick=e=>{e.stopPropagation();st.mice=st.mice||{};st.mice[d]=1;save();m.classList.add('found');SFX.squeak();
-  const n=Object.keys(st.mice).length;setTimeout(()=>{if(st.sound&&st.voice!==false){const a=new Audio('a/v/k'+(1+n%4)+'.mp3');music.volume=.02;a.onended=()=>{music.volume=.07};a.play().catch(()=>{})}},350);
+ m.onclick=e=>{e.stopPropagation();st.mice=st.mice||{};st.mice[d]=1;save();m.classList.add('found');
+  const n=Object.keys(st.mice).length;if(st.sound){const q=MOUSE[n%2];try{q.currentTime=0}catch(e){}q.play().catch(()=>SFX.squeak());if(st.voice!==false&&n===1){try{KV.muted=true;KV.currentTime=0;KV.play().catch(()=>{});setTimeout(()=>{try{KV.currentTime=0}catch(e){}KV.muted=false;music.volume=.02;KV.onended=()=>{music.volume=.07}},900)}catch(e){}}}
   toast('Krümel gefunden! '+n+' von 24');setTimeout(()=>m.remove(),1100)};
  P.appendChild(m)}
 /* ---------- Widgets ---------- */
