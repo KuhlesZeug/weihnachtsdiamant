@@ -596,3 +596,16 @@ input[type=range]{width:100%;accent-color:var(--red)}
 @keyframes wpulse{50%{transform:scale(1.25);opacity:1}}
 .solved .grim{display:flex;margin:12px 0 0;font-family:Lora,serif}
 .grim img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 15%;background:#e9d9b6;border:1px solid rgba(42,29,20,.25)}
+/* Hinweiskarten */
+.hcard{display:flex;align-items:center;gap:12px;width:100%;margin:10px 0 2px;padding:6px 12px 6px 6px;background:rgba(255,248,232,.75);border:1.5px solid rgba(42,29,20,.3);border-radius:8px;text-align:left;color:var(--ink);box-shadow:0 3px 10px rgba(40,20,5,.15);animation:hcin .35s ease-out}
+.hcard .hthumb{flex:none;width:96px;transform:rotate(-2deg);box-shadow:0 2px 6px rgba(0,0,0,.25);line-height:0}
+.hcard .hthumb svg{width:100%;height:auto}
+.hcard .hlab{font:600 15px Lora,serif}.hcard small{display:block;font:italic 400 13px Lora,serif;color:#6b4a32;margin-top:2px}
+.hcard:active{transform:scale(.98)}
+@keyframes hcin{from{opacity:0;transform:translateY(-6px)}}
+.hzoom{position:fixed;inset:0;z-index:9000;background:rgba(18,13,10,.82);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .25s}
+.hzoom.on{opacity:1}
+.hzin{width:min(96vw,760px);text-align:center;transform:scale(.94) rotate(-1deg);transition:transform .3s}
+.hzoom.on .hzin{transform:none}
+.hzin svg{width:100%;height:auto;box-shadow:0 18px 50px rgba(0,0,0,.6);border-radius:6px}
+.hzx{display:inline-block;margin-top:14px;color:#f3e6c8;font:600 15px Lora,serif;border:1px solid rgba(243,230,200,.5);border-radius:999px;padding:6px 18px}

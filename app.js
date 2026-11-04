@@ -86,7 +86,13 @@ function say(k){vDone();if(VOXF[k]){if(!st.sound||st.voice===false)return;const 
 function hush(){vDone()}
 /* Zeugen, Grimsby Reaktion, Ortsgeräusche */
 const WIT={4:[['crane','Mrs. Crane']],5:[['kutscher','Der Kutscher']],6:[['hobbs6','Mr. Hobbs'],['mary6','Mary Finch'],['rowe6','Captain Rowe']],9:[['hobbs9','Mr. Hobbs']],12:[['rowe12','Captain Rowe']],15:[['crane15','Mrs. Crane']],16:[['silas','Silas Tolliver']],17:[['mary17','Mary Finch']],19:[['nachbar','Der Nachbar']],22:[['kutscher22','Der Kutscher']]};
-for(let i=1;i<=24;i++)VOXF['r'+i]='a/v/r'+i+'.mp3';
+for(let i=1;i<=24;i++)VOXF['r'+i]='a/v/r'+i+'.mp3';VOXF.r24b='a/v/r24b.mp3';
+/* Hinweiskarten */
+function hintCard(d,n){document.querySelectorAll('.hcard').forEach(x=>x.remove());const V=window.HVIS||{},k=d+'_'+n;if(!V[k])return;
+ const b=el('button','hcard','<span class="hthumb">'+V[k]+'</span><span class="hlab">'+(window.HVIS_WHO||'Skizze')+'<small>Zum Vergrößern antippen</small></span>');
+ b.onclick=()=>{SFX.paper();const z=el('div','hzoom','<div class="hzin">'+V[k]+'<span class="hzx">Schließen</span></div>');z.onclick=()=>{z.classList.remove('on');setTimeout(()=>z.remove(),250)};document.body.appendChild(z);requestAnimationFrame(()=>z.classList.add('on'))};
+ $('#c-hint').after(b)}
+
 Object.values(WIT).forEach(a=>a.forEach(([k])=>{VOXF['c_'+k]='a/v/c_'+k+'.mp3'}));
 function sayBtn(k,b){if(b.classList.contains('on')){hush();return}if(!st.sound){toast('Schalte oben den Ton ein, dann hörst du die Stimme.');return}if(st.voice===false){st.voice=true;save()}say(k);const au=vf._cur;if(!au)return;b.classList.add('on');au.addEventListener('ended',()=>b.classList.remove('on'),{once:true})}
 function witRow(d){const old=document.querySelector('#s-case .wits');if(old)old.remove();const L=WIT[d];if(!L)return;const r=el('div','wits');r.appendChild(el('span','wlab',L.length>1?'Zeugenaussagen anhören':'Zeugenaussage anhören'));
@@ -189,7 +195,7 @@ function typeText(node,txt,cb){clearInterval(typer);node.innerHTML='';let i=0;co
  node.onclick=()=>{if(i<txt.length){clearInterval(typer);node.textContent=txt;cb&&cb()}}}
 const norm=s=>(s||'').toUpperCase().replace(/Ä/g,'AE').replace(/Ö/g,'OE').replace(/Ü/g,'UE').replace(/ß/g,'SS').replace(/[^A-Z0-9]/g,'');
 function openCase(d){curDay=d;const D=DAYS[d-1];show('#s-case');setTimeout(()=>say('d'+d+'a'),350);placeAmb(AMBMAP[d]);
- $('#c-date').textContent=d+'. Dezember 1891';$('#c-nr').textContent=d;$('#c-title').textContent=D.t;$('#c-q').textContent=D.q;$('#c-hint').textContent='';
+ $('#c-date').textContent=d+'. Dezember 1891';$('#c-nr').textContent=d;$('#c-title').textContent=D.t;$('#c-q').textContent=D.q;$('#c-hint').textContent='';document.querySelectorAll('.hcard').forEach(x=>x.remove());
  $('#c-stamp').classList.remove('on');const sv=$('#c-solved');sv.style.display='none';
  const W=$('#c-widget');W.innerHTML='';const A=$('#c-answer');A.innerHTML='';
  const ctx={d,D,submit:check,W,A,solved:!!st.done[d]};
@@ -197,16 +203,16 @@ function openCase(d){curDay=d;const D=DAYS[d-1];show('#s-case');setTimeout(()=>s
  (WIDGETS[D.w.k]||WIDGETS.none)(ctx);placeMouse(d);
  if(D.a&&!ctx.noInput){const inp=el('input');inp.placeholder=D.num?'Zahl':'Lösung';if(D.num)inp.inputMode='numeric';inp.autocomplete='off';inp.setAttribute('autocapitalize','characters');
   const b=el('button','btn','Prüfen');b.onclick=()=>check(inp.value);inp.onkeydown=e=>{if(e.key==='Enter')check(inp.value)};A.append(inp,b);ctx.input=inp}
- $('#btn-h1').onclick=()=>{SFX.paper();$('#c-hint').textContent='Inspektor Grimsby: '+D.h[0];say('d'+d+'h1')};
+ $('#btn-h1').onclick=()=>{SFX.paper();$('#c-hint').textContent='Inspektor Grimsby: '+D.h[0];say('d'+d+'h1');hintCard(d,1)};
  $('#btn-say').onclick=()=>{if(!voice.paused){hush();return}else{if(st.voice===false){st.voice=true;save()}say('d'+d+'a')}};
- $('#btn-h2').onclick=()=>{SFX.paper();$('#c-hint').textContent='Inspektor Grimsby: '+D.h[1];say('d'+d+'h2')};
+ $('#btn-h2').onclick=()=>{SFX.paper();$('#c-hint').textContent='Inspektor Grimsby: '+D.h[1];say('d'+d+'h2');hintCard(d,2)};
  if(st.done[d])showSolved(false);
  function check(v){const ok=(D.a||[]).some(a=>norm(a)===norm(v))||(D.loose||[]).some(a=>norm(v).includes(norm(a)));
   if(ok){showSolved(true)}else{SFX.no();const p=$('.paper');p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake');if(navigator.vibrate)navigator.vibrate([40,40,40]);toast('Das passt noch nicht. Schau dir die Spur noch einmal an.')}}
  ctx.check=check;
  function showSolved(fresh){const L=D.L;sv.innerHTML='<span class="stamp2">GELÖST</span>Dein Buchstabe:<b>'+L+'</b><br><span style="font-size:14px">'+D.how+'. Er wandert in deine Spurensammlung. Am Heiligabend setzt du alle Spuren zusammen.</span>';sv.style.display='block';
   if(fresh){st.done[d]=1;save();SFX.seal();const fl=el('div','flyletter',L);document.body.appendChild(fl);setTimeout(()=>fl.remove(),1700);setTimeout(SFX.ok,250);if(navigator.vibrate)navigator.vibrate([20,60,20]);setTimeout(()=>sv.scrollIntoView({behavior:'smooth',block:'center'}),400)}
-  const rOk=d!==24||Object.keys(st.done).length===24;if(rOk){const gb=el('button','grim','<img src="a/m/p_grimsby.webp" alt=""><span>Inspektor Grimsby</span>'+KI.say);gb.onclick=()=>sayBtn('r'+d,gb);sv.appendChild(gb);if(fresh&&st.sound&&st.voice!==false)setTimeout(()=>{if(curDay===d&&$('#s-case').classList.contains('on')&&!gb.classList.contains('on'))sayBtn('r'+d,gb)},1500)}
+  const rk=(d===24&&Object.keys(st.done).length<24)?'r24b':'r'+d;{const gb=el('button','grim','<img src="a/m/p_grimsby.webp" alt=""><span>Inspektor Grimsby</span>'+KI.say);gb.onclick=()=>sayBtn(rk,gb);sv.appendChild(gb);if(fresh&&st.sound&&st.voice!==false)setTimeout(()=>{if(curDay===d&&$('#s-case').classList.contains('on')&&!gb.classList.contains('on'))sayBtn(rk,gb)},1500)}
   if(d===24&&Object.keys(st.done).length===24){const fb=el('button','btn','Zum Finale');fb.style.marginTop='12px';fb.onclick=finale;sv.appendChild(el('br'));sv.appendChild(fb)}}}
 $('#btn-case-back').onclick=()=>{hush();placeAmb(null);SFX.paper();renderDesk();show('#s-desk');setTimeout(()=>{const s=document.querySelector('#report .tkey[data-d="'+curDay+'"]');if(s&&st.done[curDay]){s.classList.add('new')}},300)};
 
