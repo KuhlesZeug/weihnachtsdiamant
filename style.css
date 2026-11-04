@@ -437,3 +437,47 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .stadtplan{border:2px dashed var(--ink);border-radius:6px;padding:8px 10px;margin:0 0 12px;background:rgba(255,250,240,.6);text-align:center}
 .stadtplan .sp-k{font:700 12px 'Special Elite';letter-spacing:1px;text-transform:uppercase;opacity:.75;margin-bottom:6px}
 .stadtplan .sp-l{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:16px 'Special Elite'}
+.clock.pw{width:min(78vw,300px);aspect-ratio:300/390;filter:drop-shadow(0 10px 18px rgba(40,20,5,.35))}
+.watch.pw{width:min(78vw,300px);aspect-ratio:300/390;filter:drop-shadow(0 10px 18px rgba(40,20,5,.35))}
+
+/* Kopf der Fallakte wie im Druck */
+.chead{position:relative;margin:-20px -18px 14px;height:104px;background:#1d1a1a url(a/pano.jpg) center 62%/cover;border-radius:4px 4px 0 0;border-bottom:4px solid #8e1b1b;box-shadow:0 2px 0 #c9a24e}
+.chead::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,14,14,.9),rgba(18,14,14,.55) 55%,rgba(18,14,14,.1));border-radius:inherit}
+.chead .case-top{position:absolute;left:18px;top:26px;border:0;padding:0;color:#f4ead2;font-size:16px;letter-spacing:.06em;z-index:1}
+.chead .dept{position:absolute;left:18px;top:52px;color:#d9c79f;z-index:1;margin:0}
+.ntag{position:absolute;right:20px;top:8px;width:52px;height:68px;transform:rotate(6deg);transform-origin:50% 0;z-index:2;filter:drop-shadow(0 4px 5px rgba(0,0,0,.45))}
+.ntag::before{content:'';position:absolute;left:50%;top:-14px;width:1px;height:20px;background:#e3d5b3;transform:rotate(-14deg)}
+.ntag i{position:absolute;inset:0;background:linear-gradient(160deg,#f2d9a2,#ddb871);clip-path:polygon(25% 0,75% 0,100% 18%,100% 100%,0 100%,0 18%)}
+.ntag i::after{content:'';position:absolute;left:50%;top:7px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#3a2a1c;box-shadow:0 0 0 2px #b98d45}
+.ntag b{position:absolute;left:0;right:0;top:22px;text-align:center;font:400 10px 'Special Elite';color:#7c1d24}
+.ntag .nr{position:absolute;display:block;border-radius:0;margin:0;left:0;right:0;top:32px;text-align:center;font:800 24px 'Playfair Display';color:#7c1d24;background:none;border:0;width:auto;height:auto;box-shadow:none}
+/* Krümel Suchspiel */
+.krumel{position:absolute;z-index:6;width:58px;height:58px;background:center/contain no-repeat;cursor:pointer;filter:drop-shadow(0 3px 3px rgba(40,20,5,.35));transition:transform .25s;-webkit-tap-highlight-color:transparent}
+.krumel:active{transform:scale(.92)}
+.krumel.found{animation:kfound 1s ease forwards;pointer-events:none}
+@keyframes kfound{30%{transform:scale(1.35) rotate(-8deg)}100%{transform:scale(1.1) translateY(-30px);opacity:0}}
+.kcount{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:4px 10px 4px 4px;border-radius:20px;background:rgba(0,0,0,.35);color:#f2d9a2;font:400 12px 'Special Elite'}
+.kcount img{width:26px;height:26px;object-fit:contain}
+
+.opt.hasp{display:flex;align-items:center;gap:8px}
+.opt .opor{width:44px;height:54px;object-fit:contain;flex:none;filter:drop-shadow(0 2px 2px rgba(40,20,5,.3))}
+.ic.por{width:46px!important;height:56px!important;background:none!important;border:0!important;box-shadow:none!important;display:inline-flex;align-items:center;justify-content:center}
+.ic.por img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(40,20,5,.35))}
+/* Startbild: gemaltes London wie im Druck */
+.start-bg{background:url(a/start.jpg) center 62%/cover;filter:none}
+.start-bg::after{background:linear-gradient(180deg,rgba(10,7,5,.9) 0%,rgba(10,7,5,.66) 24%,rgba(10,7,5,.12) 44%,rgba(10,7,5,.12) 56%,rgba(10,7,5,.8) 78%,rgba(10,7,5,.95) 100%)}
+#s-start h1{text-shadow:0 3px 14px rgba(0,0,0,.9)}
+#s-start .codebox p,#s-start .small{text-shadow:0 1px 6px #000}
+#s-start .start-in{justify-content:flex-start;padding-top:calc(48px + env(safe-area-inset-top))}
+#s-start .start-in>#giftline{margin-top:auto}
+#s-start .codebox{background:rgba(14,10,8,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(201,162,78,.4);border-radius:14px;padding:14px 14px 8px;width:min(100%,360px)}
+/* Startlayout wie Winterstern: Titel groß, Diamant präsent */
+#s-start .start-in{padding-top:calc(64px + env(safe-area-inset-top))}
+#s-start .kick{margin-bottom:10px}
+#s-start h1{font-size:clamp(36px,11vw,54px);line-height:1.04;margin-top:4px}
+#s-start h1 em{display:block;font-size:.92em;margin-top:4px}
+#s-start .start-gem{width:clamp(110px,34vw,150px);margin:22px auto 10px}
+@media (max-height:700px){#s-start .start-in{padding-top:calc(40px + env(safe-area-inset-top))}#s-start .start-gem{width:96px;margin:12px auto 4px}}
+#s-start h1{font-size:clamp(38px,12vw,56px)}
+#s-start h1 em{font-size:.72em;white-space:nowrap;letter-spacing:-.01em}
+#s-start .kick{font-size:clamp(9.5px,2.7vw,12px)}

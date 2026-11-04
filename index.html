@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Special+Elite&family=Lora:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <canvas id="snow"></canvas>
@@ -45,6 +45,7 @@
     <div>
       <div class="kick">Fallakte</div>
       <div class="title">Der Weihnachtsdiamant</div>
+      <div class="kcount" id="kcount"><img src="a/m/m_peek.webp" alt=""><span></span></div>
     </div>
     <div class="headbtns">
       <button id="btn-akte" class="icon" title="Akte" aria-label="Akte"></button>
@@ -100,8 +101,11 @@
 <section id="s-case" class="screen">
   <div class="case">
     <div class="paper">
-      <div class="case-top"><span id="c-date"></span><span class="nr" id="c-nr"></span></div>
-      <div class="dept">London · Abteilung für besondere Fälle</div>
+      <div class="chead">
+        <div class="case-top"><span id="c-date"></span></div>
+        <div class="dept">London · Abteilung für besondere Fälle</div>
+        <div class="ntag"><i></i><b>NR.</b><span class="nr" id="c-nr"></span></div>
+      </div>
       <div class="titlerow"><h2 id="c-title"></h2><button class="say" id="btn-say" title="Vorlesen" aria-label="Vorlesen"></button></div>
       <p class="story" id="c-story"></p>
       <div class="widget" id="c-widget"></div>
@@ -216,10 +220,10 @@
     <p class="cm-note">Das PDF ist im A4 Querformat und lässt sich direkt ausdrucken.</p>
   </div>
 </div>
-<script src="gate.js?v=5"></script>
-<script src="icons.js?v=5"></script>
-<script src="data.js?v=5"></script>
-<script src="stimmen.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<script src="gate.js?v=7"></script>
+<script src="icons.js?v=7"></script>
+<script src="data.js?v=7"></script>
+<script src="stimmen.js?v=7"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
