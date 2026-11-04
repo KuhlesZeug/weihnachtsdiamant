@@ -582,3 +582,17 @@ input[type=range]{width:100%;accent-color:var(--red)}
 @media (max-height:720px){.start-bg{background-size:auto 90%!important;background-position:83% 4%!important}#s-start .start-in{padding-top:calc(30px + env(safe-area-inset-top))}#s-start h1{font-size:clamp(32px,10vw,44px)}#s-start .codebox{padding:10px 12px 4px;margin-top:8px}#s-start .codebox p{font-size:14px;margin:0 0 6px}#s-start .codebox input{padding:8px;font-size:18px}#s-start .codebox .small{font-size:12px;margin:6px 0 0}#s-start .btn.big{margin-top:10px}}
 .stamp2{padding:5px 9px 1px;line-height:1.15}
 .stamp-big{padding:9px 16px 4px;line-height:1.15}
+/* Zeugen und Grimsby */
+.wits{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;align-items:center}
+.wits .wlab{width:100%;font-family:'Special Elite';font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#6b4a32}
+.wchip,.grim{display:inline-flex;align-items:center;gap:8px;background:rgba(255,248,232,.7);border:1.5px solid rgba(42,29,20,.35);border-radius:999px;padding:4px 12px 4px 4px;color:var(--ink);font:600 14px Lora,serif;box-shadow:0 2px 6px rgba(40,20,5,.15);transition:transform .15s,background .2s}
+.wchip:active,.grim:active{transform:scale(.96)}
+.wpor{width:34px;height:34px;border-radius:50%;background:#e9d9b6;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;border:1px solid rgba(42,29,20,.25)}
+.wpor img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.wpor .ki{width:20px;height:20px;color:#5a3e2a}
+.wchip .wsp .ki,.grim .ki{width:16px;height:16px;color:var(--red);opacity:.8}
+.wchip.on,.grim.on{background:#f6e3b8;border-color:var(--red)}
+.wchip.on .wsp .ki,.grim.on .ki{animation:wpulse .8s ease-in-out infinite}
+@keyframes wpulse{50%{transform:scale(1.25);opacity:1}}
+.solved .grim{display:flex;margin:12px 0 0;font-family:Lora,serif}
+.grim img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 15%;background:#e9d9b6;border:1px solid rgba(42,29,20,.25)}
