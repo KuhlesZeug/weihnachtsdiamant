@@ -198,7 +198,7 @@ function openCase(d){curDay=d;const D=DAYS[d-1];show('#s-case');setTimeout(()=>s
  $('#c-date').textContent=d+'. Dezember 1891';$('#c-nr').textContent=d;$('#c-title').textContent=D.t;$('#c-q').textContent=D.q;$('#c-hint').textContent='';document.querySelectorAll('.hcard').forEach(x=>x.remove());
  $('#c-stamp').classList.remove('on');const sv=$('#c-solved');sv.style.display='none';
  const W=$('#c-widget');W.innerHTML='';const A=$('#c-answer');A.innerHTML='';
- const ctx={d,D,submit:check,W,A,solved:!!st.done[d]};
+ const ctx={d,D,submit:check,W,A,solved:!!st.done[d]};if(PROBE)window.__ctx=ctx;
  typeText($('#c-story'),D.s);witRow(d);
  (WIDGETS[D.w.k]||WIDGETS.none)(ctx);placeMouse(d);
  if(D.a&&!ctx.noInput){const inp=el('input');inp.placeholder=D.num?'Zahl':'Lösung';if(D.num)inp.inputMode='numeric';inp.autocomplete='off';inp.setAttribute('autocapitalize','characters');
@@ -313,7 +313,7 @@ const WIDGETS={
  seals(ctx){const mk=n=>{const s=svgEl('svg',{viewBox:'-40 -40 80 80',width:90});s.appendChild(svgEl('circle',{r:36,fill:'#8f1c20'}));s.appendChild(svgEl('circle',{r:26,fill:'none',stroke:'#c8585c','stroke-width':2}));const t=svgEl('path',{d:'M0 -11 L3.2 -3.6 L11 -3.4 L5 1.7 L6.9 9.4 L0 5.2 L-6.9 9.4 L-5 1.7 L-11 -3.4 L-3.2 -3.6Z',fill:'#f2c2b0'});s.appendChild(t);for(let i=0;i<n;i++){const a=i*2*Math.PI/5-Math.PI/2;s.appendChild(svgEl('circle',{cx:Math.cos(a)*31,cy:Math.sin(a)*31,r:3,fill:'#f2c2b0'}))}return s};
   const g=el('div','seals');[['O',5],['W',4],['F',5],['H',5]].forEach(([L,n])=>{const b=el('button');b.append(mk(n),el('span','',L));b.onclick=()=>{SFX.seal();g.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');ctx.check(L)};g.appendChild(b)});ctx.noInput=true;ctx.W.appendChild(g)},
  anagram(ctx){const w=ctx.D.w,n=w.letters.length,box=el('div','letters'),built=el('div','built','');let cur='';
-  const map=el('div','stadtplan','<div class="sp-k">Stadtplan · Bahnhöfe im Norden</div><div class="sp-l"><span>Marylebone</span><span>Euston</span><span>King\'s Cross</span><span>St Pancras</span></div>');
+  const map=el('div','stadtplan','<div class="sp-k">Stadtplan · Bahnhöfe im Norden</div><div class="sp-l"><span>Paddington</span><span>Euston</span><span>King\'s Cross</span><span>St Pancras</span></div>');
   const show=()=>{built.textContent=cur+'_'.repeat(n-cur.length)+w.suffix};
   const reset=()=>{cur='';show();box.querySelectorAll('button').forEach(x=>x.classList.remove('used'))};
   w.letters.split('').forEach(L=>{const b=el('button','',L);b.onclick=()=>{if(b.classList.contains('used'))return;SFX.key();b.classList.add('used');cur+=L;show();if(cur.length===n){setTimeout(()=>{ctx.check(cur);if(cur!=='EUSTON')reset()},500)}};box.appendChild(b)});
