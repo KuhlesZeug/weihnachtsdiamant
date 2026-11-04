@@ -92,8 +92,8 @@ function sayBtn(k,b){if(b.classList.contains('on')){hush();return}if(!st.sound){
 function witRow(d){const old=document.querySelector('#s-case .wits');if(old)old.remove();const L=WIT[d];if(!L)return;const r=el('div','wits');r.appendChild(el('span','wlab',L.length>1?'Zeugenaussagen anhören':'Zeugenaussage anhören'));
  L.forEach(([k,n])=>{const pp=porOf(n);const ic=pp?'<img src="'+pp+'" alt="">':(n.indexOf('Kutscher')>=0?KI.horse:KI.hat);const b=el('button','wchip','<span class="wpor">'+ic+'</span><span class="wn">'+n+'</span><span class="wsp">'+KI.say+'</span>');b.onclick=()=>sayBtn('c_'+k,b);r.appendChild(b)});
  $('#c-story').after(r)}
-const AMBMAP={2:'schnee',4:'kueche',5:'strasse',9:'strasse',11:'strasse',19:'strasse',22:'strasse',12:'bahnhof'},AMBV=.5,ABUF={};let ambSrc=null,ambG2=null,ambTok=0;
-function ambLoad(n){if(!ABUF[n]){const c=ac();ABUF[n]=fetch('a/o/'+n+'.mp3').then(r=>r.arrayBuffer()).then(b=>new Promise((res,rej)=>c.decodeAudioData(b,res,rej)))}return ABUF[n]}
+const AMBMAP={2:'schnee',4:'kueche',5:'strasse',9:'strasse',11:'strasse',19:'strasse',22:'strasse',12:'bahnhof'},AMBV=.4,ABUF={};let ambSrc=null,ambG2=null,ambTok=0;
+function ambLoad(n){if(!ABUF[n]){const c=ac();ABUF[n]=fetch('a/o/'+n+'.mp3?v=2').then(r=>r.arrayBuffer()).then(b=>new Promise((res,rej)=>c.decodeAudioData(b,res,rej)))}return ABUF[n]}
 function placeAmb(n){const c=ac(),tok=++ambTok;if(ambSrc){const s=ambSrc,g=ambG2;g.gain.setTargetAtTime(0,c.currentTime,.35);setTimeout(()=>{try{s.stop()}catch(e){}},1800);ambSrc=null;ambG2=null}
  if(amb)amb.gain.setTargetAtTime(n?.04:.12,c.currentTime,.5);if(!n)return;
  ambLoad(n).then(buf=>{if(tok!==ambTok)return;const s=c.createBufferSource();s.buffer=buf;s.loop=true;s.loopStart=.03;s.loopEnd=buf.duration-.03;const g=c.createGain();g.gain.value=0;s.connect(g);g.connect(master);s.start(0,.03);g.gain.setTargetAtTime(AMBV,c.currentTime,.6);ambSrc=s;ambG2=g}).catch(()=>{})}
