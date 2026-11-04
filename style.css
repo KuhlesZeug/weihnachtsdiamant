@@ -553,3 +553,14 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .loopfold{fill:none;stroke:rgba(255,200,190,.5);stroke-width:1.6;stroke-linecap:round}
 .tail{stroke:#c3232b;stroke-width:18;stroke-linecap:butt}
 .tailedge{fill:none;stroke:#4a080b;stroke-width:20.5;stroke-linecap:butt}
+
+/* v11: Schleife verschwindet vollständig */
+.rib.free #ev1,.rib.free #gv1{transform:translate(-30px,-260px) rotate(-25deg);opacity:0}
+.rib.free #ev2,.rib.free #gv2{transform:translate(40px,320px) rotate(20deg);opacity:0}
+.rib.free #eh1,.rib.free #gh1{transform:translate(-330px,60px) rotate(15deg);opacity:0}
+.rib.free #eh2,.rib.free #gh2{transform:translate(340px,-40px) rotate(-18deg);opacity:0}
+.rib.free #bands{opacity:0;transition:opacity .5s .7s}
+.rib.free #bowg,.rib.free #sealg{visibility:hidden;transition:visibility 0s 1.2s}
+.rib.free{pointer-events:none}
+.krumel.found{animation:kgone .55s ease-in forwards}
+@keyframes kgone{0%{transform:scale(1)}35%{transform:scale(1.3) rotate(-8deg);opacity:1}100%{transform:scale(.2) translateY(-24px) rotate(20deg);opacity:0}}
