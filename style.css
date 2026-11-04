@@ -464,7 +464,7 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .ic.por{width:46px!important;height:56px!important;background:none!important;border:0!important;box-shadow:none!important;display:inline-flex;align-items:center;justify-content:center}
 .ic.por img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(40,20,5,.35))}
 /* Startbild: gemaltes London wie im Druck */
-.start-bg{background:url(a/start.jpg) center 62%/cover;filter:none}
+.start-bg{background:url(a/start.jpg?v=9) center 62%/cover;filter:none}
 .start-bg::after{background:linear-gradient(180deg,rgba(10,7,5,.9) 0%,rgba(10,7,5,.66) 24%,rgba(10,7,5,.12) 44%,rgba(10,7,5,.12) 56%,rgba(10,7,5,.8) 78%,rgba(10,7,5,.95) 100%)}
 #s-start h1{text-shadow:0 3px 14px rgba(0,0,0,.9)}
 #s-start .codebox p,#s-start .small{text-shadow:0 1px 6px #000}
@@ -483,9 +483,9 @@ input[type=range]{width:100%;accent-color:var(--red)}
 #s-start .kick{font-size:clamp(9.5px,2.7vw,12px)}
 /* Lupe mit Diamant im Startbild zwischen Titel und Codefeld */
 #s-start .start-gem{display:none}
-.start-bg{background:#0d0a08 url(a/start.jpg) 79% 96%/auto 112% no-repeat!important}
+.start-bg{background:#0d0a08 url(a/start.jpg?v=9) 79% 96%/auto 112% no-repeat!important}
 .start-bg::after{background:linear-gradient(180deg,rgba(10,7,5,.92) 0%,rgba(10,7,5,.55) 16%,rgba(10,7,5,.04) 28%,rgba(10,7,5,0) 50%,rgba(10,7,5,.78) 76%,rgba(10,7,5,.95) 100%)!important}
 .start-bg{background-size:auto 92%!important;background-position:92% 25%!important}
 @media (max-height:720px){.start-bg{background-size:auto 81%!important;background-position:80% 22%!important}}
-@media (max-height:720px){.start-bg{background-size:auto 104%!important;background-position:86% 100%!important}}
-@media (min-height:721px){.start-bg{background-size:auto 100%!important;background-position:76% 0!important}}
+@media (max-height:720px){.start-bg{background-size:auto 104%!important;background-position:86% 0!important}}
+@media (min-height:721px){.start-bg{background-size:auto 108%!important;background-position:74% 0!important}}
