@@ -578,3 +578,5 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .opts[style*="repeat(3"] .opt .lab{font-size:clamp(11.5px,3.3vw,16px);white-space:nowrap;letter-spacing:-.01em}
 /* Eingabefelder: Schreibmaschinenschrift mit sauberen Umlauten */
 .answer input,.codebox input{font-family:'Courier Prime','Courier New',monospace;font-weight:700;letter-spacing:.04em}
+/* v13: kleine Handys, Maus mit Diamant bleibt über dem Codefeld sichtbar */
+@media (max-height:720px){.start-bg{background-size:auto 90%!important;background-position:83% 4%!important}#s-start .start-in{padding-top:calc(30px + env(safe-area-inset-top))}#s-start h1{font-size:clamp(32px,10vw,44px)}#s-start .codebox{padding:10px 12px 4px;margin-top:8px}#s-start .codebox p{font-size:14px;margin:0 0 6px}#s-start .codebox input{padding:8px;font-size:18px}#s-start .codebox .small{font-size:12px;margin:6px 0 0}#s-start .btn.big{margin-top:10px}}
