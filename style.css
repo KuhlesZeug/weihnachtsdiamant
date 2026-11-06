@@ -706,3 +706,11 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .mirror-wrap.mstage{padding:6px 0 300px}
 .mclock-wrap{padding:6px 0 230px}
 .plan2 .plan-lay{inset:1.4% 1% 1.6% 1.2%;grid-template-columns:31fr 31.6fr 36.2fr;grid-template-rows:46.6fr 51.8fr}
+/* 06.11.2026: angefangene Umschläge */
+.env.begun{background:linear-gradient(160deg,#efe0be,#d7c296)}
+.env.begun::before{top:-4%;height:44%;left:15%;right:15%;clip-path:none;border-radius:2px 2px 0 0;background:repeating-linear-gradient(180deg,#fbf6e6 0 6px,#e3d8bd 6px 7px);box-shadow:0 2px 5px rgba(60,40,10,.35)}
+.env.begun .wax{transform:translateY(5px) rotate(-14deg) scale(.82);filter:saturate(.8) brightness(1.05)}
+.env .begtag{position:absolute;right:3px;bottom:3px;font:9px 'Special Elite',monospace;letter-spacing:.04em;text-transform:uppercase;background:#8f1c20;color:#fff3e0;padding:1px 4px 0;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.3);transform:rotate(-3deg)}
+.env.begun .wax.seal::before,.env.begun .wax.seal::after{display:none}
+.env.begun .wax.seal{transform:translate(-6px,4px) rotate(-16deg) scale(.74)}
+.env.begun .wax.seal img{filter:saturate(.85) brightness(1.05) drop-shadow(0 2px 2px rgba(0,0,0,.4))}

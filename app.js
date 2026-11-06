@@ -139,8 +139,8 @@ function renderReport(box,big){box.innerHTML='';
 function kCount(){const n=Object.keys(st.mice||{}).length;const e=$('#kcount');if(e)e.querySelector('span').textContent='Krümel gefunden: '+n+' von 24'}
 function renderDesk(){kCount();renderReport($('#report'));const g=$('#grid');g.innerHTML='';const td=todayNr();
  for(let d=1;d<=24;d++){const b=el('button','env');b.style.setProperty('--r',((d*37)%7-3)*.6+'deg');b.style.setProperty('--i',d);const u=unlocked(d);
-  if(st.done[d])b.classList.add('open');else if(!u)b.classList.add('locked');if(d===td&&!st.done[d])b.classList.add('today');
-  b.appendChild(el('span','num',d));b.appendChild(el('span','wax'+(st.done[d]?'':' seal'),st.done[d]?'<b class="solvedmark">'+KI.check+'</b>':'<img src="a/siegel.svg" alt="">'+(u?'':'<i>'+KI.lock+'</i>')));
+  const bg=!st.done[d]&&u&&st.open[d];if(st.done[d])b.classList.add('open');else if(!u)b.classList.add('locked');else if(bg)b.classList.add('begun');if(d===td&&!st.done[d])b.classList.add('today');
+  b.appendChild(el('span','num',d));b.appendChild(el('span','wax'+(st.done[d]?'':' seal'),st.done[d]?'<b class="solvedmark">'+KI.check+'</b>':'<img src="a/siegel.svg" alt="">'+(u?'':'<i>'+KI.lock+'</i>')));if(bg)b.appendChild(el('span','begtag','offen'));
   b.onclick=()=>{if(!unlocked(d)){SFX.no();toast('Dieser Umschlag ist bis zum '+d+'. Dezember versiegelt.');return}SFX.tap();if(st.done[d]||st.open[d])openCase(d);else openEnv(d)};g.appendChild(b)}
  mailDrop(td);const n=Object.keys(st.done).length;$('#deskfoot').textContent=n===24?'Alle Beweisstücke gelöst. Öffne Umschlag 24 für das Finale.':n+' von 24 Beweisstücken gelöst. Jeden Tag im Dezember öffnet sich ein neuer Umschlag.'}
 
