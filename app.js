@@ -78,7 +78,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(AC&&AC
 const MOUSE=['a/v/maus1.mp3','a/v/maus2.mp3'].map(x=>{const m=new Audio(x);m.preload='auto';return m});const KV=new Audio('a/v/k1.mp3');KV.preload='auto';
 document.addEventListener('pointerdown',()=>{if(st.sound&&$('#s-desk').classList.contains('on')&&music.paused){music.muted=false;music.play().catch(()=>{})}},{capture:true,passive:true});
 
-const voice=new Audio('a/stimmen.mp3?v=20');voice.preload='auto';let vStop=null;
+const voice=new Audio('a/stimmen.mp3?v=23');voice.preload='auto';let vStop=null;
 function vDone(){clearTimeout(vStop);try{voice.pause()}catch(e){}try{for(const k in vf)if(vf[k]&&vf[k].pause)vf[k].pause()}catch(e){}music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on');document.querySelectorAll('.wchip.on,.grim.on').forEach(x=>x.classList.remove('on'))}
 const VOXF={spuren:'a/spuren.mp3',cert:'a/urkunde.mp3'};const vf={};
 function say(k){vDone();if(VOXF[k]){if(!st.sound||st.voice===false)return;const au=vf[k]||(vf[k]=new Audio(VOXF[k]));try{au.currentTime=0}catch(e){}music.volume=.02;au.onended=()=>{music.volume=.07;$('#btn-say')&&$('#btn-say').classList.remove('on')};vStop=null;au.play().catch(()=>{});vf._cur=au;return}
