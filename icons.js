@@ -14,6 +14,8 @@ window.KI={
  left:S('<path d="M15 6l-6 6 6 6" stroke-width="2.2"/>'),right:S('<path d="M9 6l6 6-6 6" stroke-width="2.2"/>'),
  up:S('<path d="M6 15l6-6 6 6" stroke-width="2.4"/>'),down:S('<path d="M6 9l6 6 6-6" stroke-width="2.4"/>'),
  star:F('<path d="M12 2.5l2.6 6.2 6.7.5-5.1 4.4 1.6 6.5L12 16.6l-5.8 3.5 1.6-6.5-5.1-4.4 6.7-.5z" fill="currentColor"/>'),
+ // Kirchenglocke
+ bell:S('<path d="M12 3.2v1.6"/><path d="M6.2 16.5c1-1.4 1-3.3 1-5.2a4.8 4.8 0 0 1 9.6 0c0 1.9 0 3.8 1 5.2z"/><path d="M5 16.5h14"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/>',"0 0 24 24"),
  // Handspiegel mit Rahmen
  mirror:S('<ellipse cx="12" cy="9" rx="5.5" ry="6.5"/><ellipse cx="12" cy="9" rx="3.6" ry="4.6" opacity=".55"/><path d="M10.2 6.6c.6-.9 1.4-1.3 2.2-1.3" opacity=".8"/><path d="M12 15.5v6M10 21.5h4"/>'),
  phone:S('<rect x="7.5" y="3" width="9" height="18" rx="2"/><path d="M11 18h2"/><path d="M3.5 9c-.8 1-.8 5 0 6M20.5 9c.8 1 .8 5 0 6"/>'),

@@ -78,6 +78,6 @@ tl+=T(186,172,'Mitternacht','text-anchor="middle" font-size="11" font-weight="60
 tl+=T(160,196,'Nach Mitternacht beginnt die Uhr wieder bei 0.','text-anchor="middle" font-size="10.5"');
 const TIME=card('DIE NACHT VOM ABEND BIS ZUM MORGEN',tl,'3:35 Uhr kommt also nach 22:15 Uhr.');
 
-window.HVIS={'4_1':CLOCK,'9_1':CLOCK,'15_1':CLOCK,'19_1':CLOCK,'5_1':COMPASS,'14_1':KNIGHT,'22_1':LONDON,'11_2':NUMS,'12_2':NUMS,'24_2':NUMS,'17_1':LOGIC,'20_1':TIME};
+window.HVIS={'4_1':CLOCK,'9_2':CLOCK,'15_2':CLOCK,'19_1':CLOCK,'5_1':COMPASS,'14_1':KNIGHT,'22_1':LONDON,'11_2':NUMS,'12_2':NUMS,'24_2':NUMS,'17_1':LOGIC,'20_1':TIME};
 window.HVIS_WHO='Skizze von Inspektor Grimsby';
 })();
