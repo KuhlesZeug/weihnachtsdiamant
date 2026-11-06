@@ -367,17 +367,17 @@ function mirrorDial(hh,mm){const s=svgEl('svg',{viewBox:'-110 -110 220 220',clas
  const g=el('div','mdial-flip');g.appendChild(s);return g}
 let BELLBUF=null,BELLP=null;
 function loadBell(){if(BELLBUF)return Promise.resolve();if(!BELLP)BELLP=fetch('a/glocke.mp3?v=20').then(r=>r.arrayBuffer()).then(a=>new Promise((ok,no)=>ac().decodeAudioData(a,ok,no))).then(b=>{BELLBUF=b}).catch(()=>{});return Promise.race([BELLP,new Promise(r=>setTimeout(r,2500))])}
-function bellBox(hours,quarters){loadBell();const b=el('div','box bellbox');const bell=el('div','bellic',KI.bell||'');const q=el('div','bellq');for(let i=0;i<4;i++)q.appendChild(el('span','','&#9834;'));
+function bellBox(hours,quarters){loadBell();const b=el('div','box bellbox');const tw=el('div','btower','<img class="bt-img" src="a/kirchturm.webp?v=21" alt="Kirchturm St. Mary"><span class="bt-glow"></span>');const bell=el('div','bellic','<img src="a/glocke.webp?v=21" alt="">');tw.appendChild(bell);const q=el('div','bellq');for(let i=0;i<4;i++)q.appendChild(el('span','','&#9834;'));
  const pb=el('button','btn sm',KI.play+' Glocken anhören');let busy=false;
  const synth=(t)=>{const f=196;[[1,.5,5],[2,.28,3.5],[2.4,.18,2.5],[3,.14,2],[4.2,.08,1.4],[5.4,.05,1]].forEach(([k,v,d])=>tone(f*k,d,'sine',v*.5,t))};
  const strike=(t)=>{const c=ac();if(BELLBUF){const s=c.createBufferSource(),g=c.createGain();g.gain.value=.9;s.buffer=BELLBUF;s.connect(g);g.connect(master);s.start(c.currentTime+(t||0))}else synth(t)};
  const chime=(f,t)=>{[[1,.4,2.4],[2,.2,1.6],[3,.08,1]].forEach(([k,v,d])=>tone(f*k,d,'sine',v*.45,t))};
- pb.onclick=async()=>{if(busy)return;busy=true;pb.disabled=true;ac();await loadBell();const sw=()=>{bell.classList.remove('sw');void bell.offsetWidth;bell.classList.add('sw')};
+ pb.onclick=async()=>{if(busy)return;busy=true;pb.disabled=true;ac();await loadBell();const sw=()=>{bell.classList.remove('sw');void bell.offsetWidth;bell.classList.add('sw');tw.classList.add('ring');setTimeout(()=>tw.classList.remove('ring'),420)};
   for(let i=0;i<hours;i++){strike(0);sw();await new Promise(r=>setTimeout(r,1500))}
   await new Promise(r=>setTimeout(r,900));const notes=[415.3,370,329.6,246.9];
   for(let k=0;k<quarters;k++){for(let i=0;i<4;i++){chime(notes[i],0);q.children[i].classList.add('on');setTimeout(()=>q.children[i].classList.remove('on'),600);await new Promise(r=>setTimeout(r,700))}await new Promise(r=>setTimeout(r,700))}
   busy=false;pb.disabled=false;pb.innerHTML=KI.play+' Noch einmal anhören'};
- b.append(el('div','bellrow','<div class="belllab">Kirchturm St. Mary</div>'),bell,q,pb,el('div','bellleg','Ein tiefer Glockenschlag zählt eine Stunde. Die kurze Melodie aus vier Tönen läutet eine Viertelstunde.'));return b}
+ b.append(el('div','bellrow','<div class="belllab">Kirchturm St. Mary</div>'),tw,q,pb,el('div','bellleg','Ein tiefer Glockenschlag zählt eine Stunde. Die kurze Melodie aus vier Tönen läutet eine Viertelstunde.'));return b}
 
 /* ---------- Akte ---------- */
 function renderAkte(){const s=$('#suspects');s.innerHTML='';SUSPECTS.forEach(x=>s.appendChild(el('div','','<span class="ic por"><img src="'+porOf(x.n)+'" alt=""></span><b>'+x.n+'</b>'+x.r)));const n=$('#numtab');n.replaceWith(Object.assign(numtab(),{id:'numtab'}))}
