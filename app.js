@@ -23,7 +23,7 @@ async function access(){await ready;if(st.act)return true;const v=kzNormCode($('
 let TOFF=0;
 (async()=>{try{const r=await fetch(location.pathname+'?t='+Date.now(),{method:'HEAD',cache:'no-store'});const d=Date.parse(r.headers.get('date'));if(d){TOFF=d-Date.now();if($('#s-desk').classList.contains('on'))renderDesk()}}catch(e){}})();
 function berlin(){const p=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date(Date.now()+TOFF));const o={};p.forEach(x=>o[x.type]=+x.value);return o}
-let PROBE=false;(async()=>{const q=params.get('probe');if(q&&await kzSha(q)==='c7f21b727a843753621d0398c133d25f15a97a8884ce156576bbbed47e6c17c9'){PROBE=true;window.__kz={openCase:d=>openCase(d)};if($('#s-desk').classList.contains('on'))renderDesk()}})();
+let PROBE=false;(async()=>{const q=params.get('probe');if(q&&['c7f21b727a843753621d0398c133d25f15a97a8884ce156576bbbed47e6c17c9','db9895336cf3d8e262f67463d3a8a6cdb4733130c1fe1f00c83d8ed6b4106e1c'].includes(await kzSha(q))){PROBE=true;window.__kz={openCase:d=>openCase(d)};if($('#s-desk').classList.contains('on'))renderDesk()}})();
 function unlocked(d){if(PROBE)return true;const b=berlin();if(b.month===12)return b.day>=d;if(b.month===1&&b.day<=31)return true;return false}
 function todayNr(){const b=berlin();return b.month===12&&b.day<=24?b.day:0}
 
