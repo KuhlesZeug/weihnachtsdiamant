@@ -752,3 +752,6 @@ input[type=range]{width:100%;accent-color:var(--red)}
 .mirror-wrap.mstage{padding-bottom:380px}
 
 .mclock-wrap.mstage{padding-bottom:400px}
+
+.fp-vit{text-align:center}.fp-glas{display:inline-block;position:relative;margin-top:4px}.fp-glas img{width:140px;height:auto;display:block;border-radius:8px;box-shadow:0 6px 14px rgba(0,0,0,.22)}.fp-glas span{display:block;font:italic 12px/1.3 Lora,Georgia,serif;color:#6b5a48;margin-top:5px}
+.fp-card .fp-img{width:90%;height:auto;display:block;margin:4px auto 0;-webkit-user-select:none;user-select:none}
